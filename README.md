@@ -1,49 +1,47 @@
-# 🩸 Blood Bank & Donor Management System (Mobile Application)
+# 🩸 Blood Bank & Donor Management System (Web Application)
 
 ## 📌 Project Overview
 
-The **Blood Bank & Donor Management System** is a mobile application designed to help users quickly find nearby blood donors based on blood type and location.
+The **Blood Bank & Donor Management System** is a web-based application designed to help users quickly find nearby blood donors based on blood type and location.
 
-The application connects blood donors and people who need blood during emergencies through a simple and efficient digital platform. Donors can register their details, and users can search for compatible donors and contact them easily.
+This system is developed using **HTML, CSS, Bootstrap, JavaScript, and Firebase**, allowing real-time donor management and fast emergency support.
 
 ---
 
-## 💡 Idea of the Application
+## 💡 Idea of the Project
 
-Finding a suitable blood donor during an emergency can be difficult and time-consuming. This application provides a centralized platform where:
+During medical emergencies, finding a suitable blood donor is very difficult and time-consuming. This system solves that problem by providing a **centralized web platform** where:
 
-* Donors can register with their personal information.
-* Users can search donors by blood group and location.
-* Users can directly contact available donors.
-* Donor information can be managed efficiently.
+* Donors can register their details online
+* Users can search donors by blood group and location
+* Users can contact donors easily
+* Data is stored in real-time using Firebase
 
-The main goal is to reduce the time required to find matching blood donors and help save lives.
+The system helps **connect donors and patients quickly to save lives**.
 
 ---
 
 ## 🚨 Problem Statement
 
-During medical emergencies, finding a matching blood donor quickly is a major challenge.
-
-Traditional methods such as:
+In emergency situations, traditional methods such as:
 
 * Phone calls
-* Social media requests
-* Asking through personal networks
+* Social media posts
+* Manual searching
 
-are often slow and unreliable.
+are slow and unreliable.
 
-This application solves this problem by providing a fast and organized system that connects patients with suitable blood donors in their area.
+This web application solves this by providing a **fast, digital, and organized donor database system**.
 
 ---
 
 # 🎯 Objectives
 
-* Register blood donors with their personal details and blood groups.
-* Allow users to search donors based on blood type and location.
-* Provide easy communication between users and donors.
-* Maintain an organized donor database.
-* Improve the speed and efficiency of finding blood donors.
+* Register blood donors with personal details
+* Search donors by blood group and location
+* Enable quick communication between users and donors
+* Store and manage data using Firebase
+* Improve emergency response time
 
 ---
 
@@ -51,55 +49,72 @@ This application solves this problem by providing a fast and organized system th
 
 ## 👤 Donor Registration
 
-Donors can create profiles including:
+Users can register as donors by providing:
 
 * Full Name
 * Blood Group
 * Location
 * Contact Number
-* Other required details
+* Email (optional)
+
+Data is saved in **Firebase Realtime Database / Firestore**.
 
 ---
 
-## 🔍 Donor Search
+## 🔍 Search Donors
 
-Users can search available donors by:
+Users can search donors by:
 
 * Blood Group
 * Location
 
-This helps users find suitable donors quickly.
+This helps find compatible donors quickly during emergencies.
 
 ---
 
 ## 📋 Donor List Display
 
-The application displays registered donors with relevant information for easy access.
+All registered donors are displayed in a structured list or card layout using Bootstrap.
 
 ---
 
 ## 📞 Contact Donor
 
-Users can contact donors through:
+Users can contact donors via:
 
-* Phone Call
-* Message
+* Phone Call link (`tel:`)
+* WhatsApp / Message link
+* Email (optional)
+
+---
+
+## 🔥 Firebase Integration
+
+The system uses Firebase for:
+
+* Real-time database storage
+* Fetching donor data dynamically
+* Updating donor list instantly
 
 ---
 
 ## 👨‍💻 Admin Panel (Future Enhancement)
 
-Admin can:
+Admin features may include:
 
-* Verify donor details
-* Manage donor records
-* Maintain database accuracy
+* Verify donor accounts
+* Remove fake entries
+* Manage donor database
 
 ---
 
-## 🔔 Emergency Request Notification (Future Enhancement)
+## 🔔 Emergency Alert System (Future Enhancement)
 
-Future updates will include emergency blood request notifications to alert nearby donors quickly.
+Future updates will include:
+
+* Emergency blood request alerts
+* Nearby donor notifications
+* Location-based matching
 
 ---
 
@@ -107,55 +122,42 @@ Future updates will include emergency blood request notifications to alert nearb
 
 ## Frontend
 
-* Jetpack Compose
-* Android Studio
+* HTML5
+* CSS3
+* Bootstrap
+* JavaScript
 
-## Programming Language
+## Backend / Database
 
-* Kotlin
+* Firebase Realtime Database / Firestore
 
-## Backend
+## Tools
 
-* ViewModel
-* LiveData
-* Kotlin Coroutines
-
-## Database
-
-* Firebase Realtime Database
-* Room Database (Local Storage)
-
-## Version Control
-
+* VS Code
 * GitHub
+* Firebase Console
 
 ---
 
 # 🏗️ System Architecture
 
-The application follows a modern Android architecture:
-
-User Interface
+User Interface (HTML/CSS/Bootstrap)
 ⬇️
-ViewModel
+JavaScript (Logic & Validation)
 ⬇️
-LiveData / Kotlin Coroutines
-⬇️
-Firebase Realtime Database / Room Database
+Firebase (Database & Real-time Data)
 
 ---
 
 # 📱 Expected Outcome
 
-A fully functional mobile application that allows users to:
+A fully functional web application that allows users to:
 
 ✅ Register as blood donors
-✅ Search nearby donors
-✅ Filter donors by blood group and location
-✅ Contact donors quickly
-✅ Manage donor information efficiently
-
-The system aims to provide a reliable solution for emergency blood donor searching.
+✅ Search donors by blood group & location
+✅ View donor list in real-time
+✅ Contact donors instantly
+✅ Manage emergency blood requests efficiently
 
 ---
 
@@ -173,15 +175,15 @@ The system aims to provide a reliable solution for emergency blood donor searchi
 
 # 🚀 Future Improvements
 
-* Real-time emergency notifications
-* GPS-based nearby donor search
+* Google Maps integration for nearby donors
+* Real-time emergency notification system
+* Donor availability status (Active / Inactive)
 * Blood donation history tracking
-* Donor availability status
-* Online appointment scheduling
 * AI-based donor matching system
+* SMS alert system for emergencies
 
 ---
 
 # ❤️ Project Goal
 
-"Connecting blood donors and patients faster to help save lives."
+**"To connect blood donors and patients instantly through a simple and fast web platform, helping save lives in emergency situations."**
