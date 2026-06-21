@@ -6,7 +6,7 @@ The **Blood Bank & Donor Management System** is a web-based application designed
 
 This system is developed using **HTML, CSS, Bootstrap, JavaScript, and Firebase**, allowing real-time donor management and fast emergency support.
 
----
+
 
 ## 💡 Idea of the Project
 
@@ -19,7 +19,7 @@ During medical emergencies, finding a suitable blood donor is very difficult and
 
 The system helps **connect donors and patients quickly to save lives**.
 
----
+
 
 ## 🚨 Problem Statement
 
@@ -33,7 +33,7 @@ are slow and unreliable.
 
 This web application solves this by providing a **fast, digital, and organized donor database system**.
 
----
+
 
 # 🎯 Objectives
 
@@ -43,7 +43,7 @@ This web application solves this by providing a **fast, digital, and organized d
 * Store and manage data using Firebase
 * Improve emergency response time
 
----
+
 
 # ✨ Main Features
 
@@ -59,7 +59,7 @@ Users can register as donors by providing:
 
 Data is saved in **Firebase Realtime Database / Firestore**.
 
----
+
 
 ## 🔍 Search Donors
 
@@ -70,13 +70,13 @@ Users can search donors by:
 
 This helps find compatible donors quickly during emergencies.
 
----
+
 
 ## 📋 Donor List Display
 
 All registered donors are displayed in a structured list or card layout using Bootstrap.
 
----
+
 
 ## 📞 Contact Donor
 
@@ -86,7 +86,7 @@ Users can contact donors via:
 * WhatsApp / Message link
 * Email (optional)
 
----
+
 
 ## 🔥 Firebase Integration
 
@@ -96,7 +96,7 @@ The system uses Firebase for:
 * Fetching donor data dynamically
 * Updating donor list instantly
 
----
+
 
 ## 👨‍💻 Admin Panel (Future Enhancement)
 
@@ -106,7 +106,7 @@ Admin features may include:
 * Remove fake entries
 * Manage donor database
 
----
+
 
 ## 🔔 Emergency Alert System (Future Enhancement)
 
@@ -116,7 +116,7 @@ Future updates will include:
 * Nearby donor notifications
 * Location-based matching
 
----
+
 
 # 🛠️ Technologies Used
 
@@ -137,7 +137,7 @@ Future updates will include:
 * GitHub
 * Firebase Console
 
----
+
 
 # 🏗️ System Architecture
 
@@ -147,7 +147,7 @@ JavaScript (Logic & Validation)
 ⬇️
 Firebase (Database & Real-time Data)
 
----
+
 
 # 📱 Expected Outcome
 
@@ -159,7 +159,7 @@ A fully functional web application that allows users to:
 ✅ Contact donors instantly
 ✅ Manage emergency blood requests efficiently
 
----
+
 
 # 👥 Group Members
 
@@ -171,7 +171,7 @@ A fully functional web application that allows users to:
 | J. Sasika          | GWU-HICT-2021-44 |
 | R. Madhushalini    | GWU-HICT-2021-34 |
 
----
+
 
 # 🚀 Future Improvements
 
@@ -182,7 +182,7 @@ A fully functional web application that allows users to:
 * AI-based donor matching system
 * SMS alert system for emergencies
 
----
+
 
 # ❤️ Project Goal
 
