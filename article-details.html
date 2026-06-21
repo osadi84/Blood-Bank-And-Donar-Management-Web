@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeFlow - Blood Bank & Donor Management System</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+
+    
+    <style>
+        .article-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .article-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="white"/><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="white"/><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="white"/></svg>');
+            background-size: cover;
+            background-position: bottom;
+            opacity: 0.1;
+        }
+        
+        .article-content {
+            font-family: 'Merriweather', serif;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .article-content h2 {
+            font-family: 'Montserrat', sans-serif;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .article-content h3 {
+            font-family: 'Montserrat', sans-serif;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: #333;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.5rem;
+            color: #444;
+        }
+        
+        .article-content blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: #666;
+            font-size: 1.2rem;
+        }
+        
+        .article-content ul, .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .author-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .share-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .share-facebook { background: #3b5998; }
+        .share-twitter { background: #1da1f2; }
+        .share-linkedin { background: #0077b5; }
+        .share-whatsapp { background: #25d366; }
+        .share-email { background: #ea4335; }
+        
+        .article-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        
+        .infographic-card {
+            background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+            border-radius: 10px;
+            padding: 30px;
+            margin: 2rem 0;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .benefit-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            border-top: 3px solid var(--primary);
+        }
+        
+        .table-of-contents {
+            position: sticky;
+            top: 100px;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .toc-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .toc-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .toc-item a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .toc-item a:hover {
+            color: var(--primary);
+        }
+        
+        .toc-item a::before {
+            content: '•';
+            color: var(--primary);
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .read-time {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .article-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .tag {
+            background: #f0f0f0;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .tag:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .related-article-card {
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        
+        .related-article-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .related-article-img {
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .comment-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+        }
+        
+        .comment-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .comment-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-weight: bold;
+        }
+        
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+        }
+        
+        .progress-ring-circle {
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        .blood-facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        
+        .blood-fact {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .blood-fact-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .donation-process {
+            position: relative;
+            padding-left: 30px;
+            margin: 2rem 0;
+        }
+        
+        .donation-process::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary), #764ba2);
+        }
+        
+        .process-step {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 20px;
+        }
+        
+        .process-step:last-child {
+            margin-bottom: 0;
+        }
+        
+        .process-step::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--primary);
+        }
+        
+        .print-btn, .save-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            color: #666;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+        
+        .print-btn:hover, .save-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .article-hero {
+                padding: 80px 0 30px;
+            }
+            
+            .article-image {
+                height: 250px;
+            }
+            
+            .table-of-contents {
+                position: static;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar bg-dark text-white py-2">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <span><i class="fas fa-phone-alt me-2"></i>Emergency: 1990</span>
+                        <span><i class="fas fa-envelope me-2"></i>help@lifeflow.lk</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="d-inline-flex align-items-center gap-3">
+                        <div class="theme-switch">
+                            <button class="btn btn-sm btn-outline-light" id="themeToggle">
+                                <i class="fas fa-moon"></i>
+                            </button>
+                        </div>
+                        <a href="login.html" class="text-white text-decoration-none">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a href="register.html" class="btn btn-danger btn-sm">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand" href="index.html">
+                <img src="https://img.freepik.com/premium-vector/blood-donation-logo-design-vector_369465-218.jpg" alt="LifeFlow Logo" height="40">
+                <span class="brand-name">Life<span class="text-danger">Flow</span></span>
+            </a>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="d-none d-lg-flex mx-auto" style="width: 400px;">
+                <div class="input-group search-box">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0" 
+                           id="globalSearch" 
+                           placeholder="Search for services, donors, hospitals..."
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                    <button class="btn btn-danger" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
+                    <!-- Search Results Dropdown -->
+                    <ul class="dropdown-menu w-100" id="searchResults">
+                        <li><h6 class="dropdown-header">Quick Actions</h6></li>
+                        <li><a class="dropdown-item" href="pages/donors.html"><i class="fas fa-users me-2"></i>Find Donors</a></li>
+                        <li><a class="dropdown-item" href="pages/emergency.html"><i class="fas fa-ambulance me-2"></i>Emergency Request</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><h6 class="dropdown-header">Services</h6></li>
+                        <li><a class="dropdown-item" href="pages/services.html#blood-test"><i class="fas fa-vial me-2"></i>Blood Testing</a></li>
+                        <li><a class="dropdown-item" href="pages/services.html#donation"><i class="fas fa-hand-holding-heart me-2"></i>Donation Camp</a></li>
+                        <li><a class="dropdown-item" href="pages/services.html#storage"><i class="fas fa-boxes me-2"></i>Blood Storage</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Nav Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nav Items -->
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="find-donor.html">Find Donors</a></li>
+                    <li class="nav-item"><a class="nav-link" href="campaigns.html">Campaigns</a></li>
+                    <li class="nav-item"><a class="nav-link" href="blog.html">Achievements</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    
+                    <!-- Mobile Search -->
+                    <li class="nav-item d-lg-none mt-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <button class="btn btn-danger" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Article Hero -->
+    <section class="article-hero">
+        <div class="container position-relative">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <span class="badge bg-danger bg-opacity-25 text-white mb-3">HEALTH & WELLNESS</span>
+                    <h1 class="display-4 fw-bold mb-3">The Life-Saving Power of Regular Blood Donation</h1>
+                    <p class="lead mb-4">Discover how regular blood donation not only saves lives but also improves your own health and wellbeing</p>
+                    
+                    <div class="article-meta justify-content-center">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <div class="author-avatar">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0">Dr. Amanda Wijerathna</h6>
+                                <small class="text-light">Medical Director & Health Researcher</small>
+                            </div>
+                        </div>
+                        
+                        <div class="text-light">
+                            <i class="far fa-calendar me-1"></i> December 15, 2025
+                        </div>
+                        
+                        <div class="read-time">
+                            <i class="far fa-clock me-1"></i> 8 min read
+                        </div>
+                        
+                        <div class="text-light">
+                            <i class="fas fa-eye me-1"></i> 2,845 views
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <button class="print-btn" title="Print Article" onclick="window.print()">
+                            <i class="fas fa-print"></i>
+                        </button>
+                        <button class="save-btn" title="Save for Later" id="saveArticle">
+                            <i class="far fa-bookmark"></i>
+                        </button>
+                        <a href="#comments" class="btn btn-outline-light">
+                            <i class="fas fa-comments me-2"></i>24 Comments
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Article Content -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Main Article Content -->
+                <div class="col-lg-8">
+                    <!-- Featured Image -->
+                    <img src="https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                         alt="Blood Donation Process" class="article-image shadow">
+                    
+                    <!-- Article Stats -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="share-buttons">
+                            <span class="me-2 text-muted">Share:</span>
+                            <a href="#" class="share-btn share-facebook" title="Share on Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="share-btn share-twitter" title="Share on Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="share-btn share-linkedin" title="Share on LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="share-btn share-whatsapp" title="Share on WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="#" class="share-btn share-email" title="Share via Email">
+                                <i class="far fa-envelope"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="text-muted">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star-half-alt text-warning"></i>
+                            (4.7)
+                        </div>
+                    </div>
+                    
+                    <!-- Article Content -->
+                    <div class="article-content">
+                        <p class="lead">Every year, millions of lives are saved through blood donations. But did you know that regular blood donation offers significant health benefits to donors themselves? In this comprehensive guide, we explore the dual benefits of this life-saving act.</p>
+                        
+                        <h2>Why Blood Donation Matters</h2>
+                        <p>Blood cannot be manufactured—it can only come from generous donors. A single donation can save up to three lives, and every two seconds someone in Sri Lanka needs blood. Yet only about 3% of age-eligible people donate blood yearly.</p>
+                        
+                        <!-- Blood Facts Grid -->
+                        <div class="blood-facts-grid">
+                            <div class="blood-fact">
+                                <div class="blood-fact-icon">
+                                    <i class="fas fa-heartbeat"></i>
+                                </div>
+                                <h5>470ml</h5>
+                                <p class="small mb-0">Average blood donated per session</p>
+                            </div>
+                            <div class="blood-fact">
+                                <div class="blood-fact-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h5>3 Lives</h5>
+                                <p class="small mb-0">Saved by one donation</p>
+                            </div>
+                            <div class="blood-fact">
+                                <div class="blood-fact-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <h5>56 Days</h5>
+                                <p class="small mb-0">Between donations</p>
+                            </div>
+                            <div class="blood-fact">
+                                <div class="blood-fact-icon">
+                                    <i class="fas fa-percentage"></i>
+                                </div>
+                                <h5>38%</h5>
+                                <p class="small mb-0">O+ donors in Sri Lanka</p>
+                            </div>
+                        </div>
+                        
+                        <blockquote>
+                            "The gift of blood is the gift of life. There is no substitute for human blood. Every drop counts, and every donor is a hero."
+                            <footer class="mt-2">— Dr. Asanka Pallewatta</footer>
+                        </blockquote>
+                        
+                        <h2>Health Benefits for Regular Donors</h2>
+                        <p>Regular blood donation provides several health advantages that many donors are unaware of:</p>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <div class="benefit-card">
+                                    <h5><i class="fas fa-heart text-danger me-2"></i>Cardiovascular Health</h5>
+                                    <p class="small mb-0">Regular donation helps maintain healthy iron levels, reducing the risk of heart attacks by up to 88%.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="benefit-card">
+                                    <h5><i class="fas fa-fire text-danger me-2"></i>Calorie Burning</h5>
+                                    <p class="small mb-0">Donating blood burns approximately 650 calories per donation as your body works to replenish itself.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="benefit-card">
+                                    <h5><i class="fas fa-stethoscope text-danger me-2"></i>Free Health Screening</h5>
+                                    <p class="small mb-0">Every donation includes a mini-physical checking pulse, blood pressure, temperature, and hemoglobin levels.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="benefit-card">
+                                    <h5><i class="fas fa-recycle text-danger me-2"></i>Blood Cell Refresh</h5>
+                                    <p class="small mb-0">Your body replaces donated blood within 48 hours, stimulating the production of fresh, new blood cells.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3>The Donation Process Explained</h3>
+                        <p>Understanding what happens during donation can help first-time donors feel more comfortable:</p>
+                        
+                        <div class="donation-process">
+                            <div class="process-step">
+                                <h5>1. Registration & Health Screening</h5>
+                                <p>You'll complete a donor registration form and undergo a confidential health screening to ensure donation safety.</p>
+                            </div>
+                            <div class="process-step">
+                                <h5>2. Pre-donation Health Check</h5>
+                                <p>A quick check of your temperature, pulse, blood pressure, and hemoglobin levels to ensure you're eligible to donate.</p>
+                            </div>
+                            <div class="process-step">
+                                <h5>3. The Donation</h5>
+                                <p>The actual donation takes about 8-10 minutes. You'll be seated comfortably while approximately 470ml of blood is collected.</p>
+                            </div>
+                            <div class="process-step">
+                                <h5>4. Post-donation Refreshment</h5>
+                                <p>After donating, you'll rest for 10-15 minutes and enjoy light refreshments to help your body recover.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Infographic Card -->
+                        <div class="infographic-card">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h4 class="fw-bold mb-3">Did You Know?</h4>
+                                    <p class="mb-0">Your body replaces the plasma portion of your blood within 24 hours. Red blood cells take about 4-6 weeks to completely replace. This is why you must wait 56 days between whole blood donations.</p>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <svg class="progress-ring" viewBox="0 0 120 120">
+                                        <circle class="progress-ring-circle" stroke="#e6e6e6" stroke-width="10" fill="transparent" r="52" cx="60" cy="60"/>
+                                        <circle class="progress-ring-circle" stroke="var(--primary)" stroke-width="10" fill="transparent" r="52" cx="60" cy="60" stroke-dasharray="326.56" stroke-dashoffset="65.312"/>
+                                        <text x="60" y="65" text-anchor="middle" font-weight="bold" font-size="14">80%</text>
+                                    </svg>
+                                    <p class="small mt-2 mb-0">Of plasma replaced in 24 hours</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h2>Who Can Donate?</h2>
+                        <p>To ensure the safety of both donors and recipients, certain eligibility criteria must be met:</p>
+                        
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <h5><i class="fas fa-check-circle text-success me-2"></i>Basic Requirements</h5>
+                                <ul>
+                                    <li>Age: 18-65 years (16-17 with parental consent)</li>
+                                    <li>Weight: At least 50kg (110 lbs)</li>
+                                    <li>Good general health</li>
+                                    <li>No illness on donation day</li>
+                                    <li>Hemoglobin level at least 12.5 g/dL</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5><i class="fas fa-times-circle text-danger me-2"></i>Temporary Deferrals</h5>
+                                <ul>
+                                    <li>Cold or flu symptoms</li>
+                                    <li>Recent surgery (6 months)</li>
+                                    <li>Tattoo or piercing (6 months)</li>
+                                    <li>Pregnancy (6 months after delivery)</li>
+                                    <li>Certain medications</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <h2>Preparing for Your Donation</h2>
+                        <p>Proper preparation ensures a smooth donation experience:</p>
+                        
+                        <div class="alert alert-info">
+                            <h5><i class="fas fa-lightbulb me-2"></i>Pro Tips for First-Time Donors</h5>
+                            <ul class="mb-0">
+                                <li><strong>Hydrate:</strong> Drink plenty of water 24 hours before donation</li>
+                                <li><strong>Eat iron-rich foods:</strong> Red meat, spinach, beans, and fortified cereals</li>
+                                <li><strong>Get good sleep:</strong> Rest well the night before</li>
+                                <li><strong>Avoid fatty foods:</strong> They can affect blood tests</li>
+                                <li><strong>Wear comfortable clothing:</strong> Shirts with sleeves that can be rolled up</li>
+                            </ul>
+                        </div>
+                        
+                        <h2>Common Myths Debunked</h2>
+                        
+                        <div class="accordion mb-4" id="mythsAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#myth1">
+                                        <i class="fas fa-times text-danger me-2"></i> Myth: Donating blood weakens your immune system
+                                    </button>
+                                </h2>
+                                <div id="myth1" class="accordion-collapse collapse show" data-bs-parent="#mythsAccordion">
+                                    <div class="accordion-body">
+                                        <strong>Truth:</strong> Your immune system is not affected by blood donation. The white blood cells that fight infection are replaced within a few days.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#myth2">
+                                        <i class="fas fa-times text-danger me-2"></i> Myth: You can get diseases from donating blood
+                                    </button>
+                                </h2>
+                                <div id="myth2" class="accordion-collapse collapse" data-bs-parent="#mythsAccordion">
+                                    <div class="accordion-body">
+                                        <strong>Truth:</strong> All equipment used is sterile, disposable, and used only once. There is no risk of contracting any disease.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#myth3">
+                                        <i class="fas fa-times text-danger me-2"></i> Myth: Vegetarians cannot donate blood
+                                    </button>
+                                </h2>
+                                <div id="myth3" class="accordion-collapse collapse" data-bs-parent="#mythsAccordion">
+                                    <div class="accordion-body">
+                                        <strong>Truth:</strong> Vegetarians can donate blood as long as they maintain adequate iron levels through plant-based sources like lentils, spinach, and fortified foods.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h2>After Donation: Recovery Tips</h2>
+                        <p>Taking care of yourself after donation ensures a quick recovery:</p>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="card border-0 bg-light h-100">
+                                    <div class="card-body">
+                                        <h5><i class="fas fa-check text-success me-2"></i>Do These</h5>
+                                        <ul class="mb-0">
+                                            <li>Drink extra fluids for 24-48 hours</li>
+                                            <li>Keep the bandage on for 4-6 hours</li>
+                                            <li>Eat iron-rich meals</li>
+                                            <li>Rest if you feel lightheaded</li>
+                                            <li>Apply cold packs if bruising occurs</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-0 bg-light h-100">
+                                    <div class="card-body">
+                                        <h5><i class="fas fa-times text-danger me-2"></i>Avoid These</h5>
+                                        <ul class="mb-0">
+                                            <li>Strenuous exercise for 24 hours</li>
+                                            <li>Smoking for 2 hours after donation</li>
+                                            <li>Alcohol for 24 hours</li>
+                                            <li>Heavy lifting with donation arm</li>
+                                            <li>Hot showers immediately after</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-5 text-center">
+                            <h3>Ready to Make a Difference?</h3>
+                            <p class="lead mb-4">Join thousands of life-savers in our community</p>
+                            <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
+                                <a href="register.html" class="btn btn-danger btn-lg">
+                                    <i class="fas fa-user-plus me-2"></i>Become a Donor
+                                </a>
+                                <a href="campaigns.html" class="btn btn-outline-danger btn-lg">
+                                    <i class="fas fa-calendar-alt me-2"></i>Find a Campaign
+                                </a>
+                                <a href="find-donors.html" class="btn btn-outline-primary btn-lg">
+                                    <i class="fas fa-search me-2"></i>Learn More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Article Tags -->
+                    <div class="article-tags">
+                        <span class="text-muted me-2">Tags:</span>
+                        <a href="#" class="tag">Blood Donation</a>
+                        <a href="#" class="tag">Health Benefits</a>
+                        <a href="#" class="tag">Medical Research</a>
+                        <a href="#" class="tag">Wellness</a>
+                        <a href="#" class="tag">Cardiovascular Health</a>
+                        <a href="#" class="tag">Community Service</a>
+                    </div>
+                    
+                    <!-- Author Card -->
+                    <div class="author-card mt-5">
+                        <div class="author-avatar">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Dr. Amanda Wijerathna</h5>
+                            <p class="text-muted small mb-2">Medical Director at LifeFlow | Health Researcher | Blood Bank Specialist</p>
+                            <p class="small mb-0">With over 15 years of experience in hematology and transfusion medicine, Dr. Pallewatta has published numerous research papers on blood donation benefits and donor health.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Comments Section -->
+                    <div class="comment-section mt-5" id="comments">
+                        <h4 class="fw-bold mb-4">
+                            <i class="fas fa-comments me-2"></i>Comments (24)
+                        </h4>
+                        
+                        <!-- Comment Form -->
+                        <div class="card mb-4 border-0 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="fw-bold mb-3">Leave a Comment</h5>
+                                <form id="commentForm">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" placeholder="Your Name" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="email" class="form-control" placeholder="Your Email" required>
+                                        </div>
+                                        <div class="col-12">
+                                            <textarea class="form-control" rows="4" placeholder="Your Comment" required></textarea>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="saveInfo">
+                                                <label class="form-check-label" for="saveInfo">
+                                                    Save my name and email for future comments
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fas fa-paper-plane me-2"></i>Post Comment
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Comments List -->
+                        <div class="comment-card">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <div class="comment-avatar">SD</div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            <h6 class="fw-bold mb-0">Samantha De Silva</h6>
+                                            <small class="text-muted">
+                                                <i class="far fa-clock me-1"></i> 2 days ago
+                                            </small>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-reply me-1"></i>Reply
+                                        </button>
+                                    </div>
+                                    <p class="mb-2">This article completely changed my perspective on blood donation. I never knew about the health benefits for donors! Scheduled my first donation for next week.</p>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-secondary">
+                                            <i class="fas fa-thumbs-up"></i> 12
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary">
+                                            <i class="fas fa-thumbs-down"></i> 2
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="comment-card">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <div class="comment-avatar">KR</div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            <h6 class="fw-bold mb-0">Kavindu Rajapakse</h6>
+                                            <small class="text-muted">
+                                                <i class="far fa-clock me-1"></i> 1 week ago
+                                            </small>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-reply me-1"></i>Reply
+                                        </button>
+                                    </div>
+                                    <p class="mb-2">As a regular donor for 5 years, I can confirm the health benefits mentioned here. My iron levels have been perfect, and I feel great knowing I'm helping others.</p>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-secondary">
+                                            <i class="fas fa-thumbs-up"></i> 28
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary">
+                                            <i class="fas fa-thumbs-down"></i> 0
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sidebar -->
+                <div class="col-lg-4">
+                    <!-- Table of Contents -->
+                    <div class="table-of-contents">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-list me-2"></i>Table of Contents
+                        </h5>
+                        <div class="toc-item"><a href="#why-donation">Why Blood Donation Matters</a></div>
+                        <div class="toc-item"><a href="#health-benefits">Health Benefits for Regular Donors</a></div>
+                        <div class="toc-item"><a href="#donation-process">The Donation Process Explained</a></div>
+                        <div class="toc-item"><a href="#eligibility">Who Can Donate?</a></div>
+                        <div class="toc-item"><a href="#preparation">Preparing for Your Donation</a></div>
+                        <div class="toc-item"><a href="#myths">Common Myths Debunked</a></div>
+                        <div class="toc-item"><a href="#recovery">After Donation: Recovery Tips</a></div>
+                        <div class="toc-item"><a href="#comments">Comments & Discussion</a></div>
+                    </div>
+                    
+                    <!-- Newsletter Subscription -->
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body text-center p-4">
+                            <div class="newsletter-icon mb-3">
+                                <i class="fas fa-newspaper fa-3x text-danger"></i>
+                            </div>
+                            <h5 class="fw-bold mb-2">Subscribe to Our Newsletter</h5>
+                            <p class="text-muted small mb-3">Get the latest health articles and donation updates</p>
+                            <form>
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" placeholder="Your email address">
+                                </div>
+                                <button type="submit" class="btn btn-danger w-100">Subscribe</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Related Articles -->
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-0">
+                            <h5 class="fw-bold mb-0">
+                                <i class="fas fa-book-open me-2"></i>Related Articles
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Related Article 1 -->
+                            <div class="related-article-card card border-0 mb-3">
+                                <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                                     alt="Blood Types" class="related-article-img">
+                                <div class="card-body">
+                                    <span class="badge bg-info mb-2">SCIENCE</span>
+                                    <h6 class="fw-bold">Understanding Blood Types and Compatibility</h6>
+                                    <p class="text-muted small mb-2">A complete guide to blood type matching and transfusion safety</p>
+                                    <small class="text-muted"><i class="far fa-clock me-1"></i> 5 min read</small>
+                                </div>
+                            </div>
+                            
+                            <!-- Related Article 2 -->
+                            <div class="related-article-card card border-0 mb-3">
+                                <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                                     alt="Emergency" class="related-article-img">
+                                <div class="card-body">
+                                    <span class="badge bg-danger mb-2">EMERGENCY</span>
+                                    <h6 class="fw-bold">How Blood Donation Helps in Emergency Situations</h6>
+                                    <p class="text-muted small mb-2">The critical role of blood banks during disasters</p>
+                                    <small class="text-muted"><i class="far fa-clock me-1"></i> 6 min read</small>
+                                </div>
+                            </div>
+                            
+                            <!-- Related Article 3 -->
+                            <div class="related-article-card card border-0">
+                                <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                                     alt="Nutrition" class="related-article-img">
+                                <div class="card-body">
+                                    <span class="badge bg-success mb-2">NUTRITION</span>
+                                    <h6 class="fw-bold">Foods That Boost Iron Levels for Donors</h6>
+                                    <p class="text-muted small mb-2">Essential dietary tips for maintaining healthy iron levels</p>
+                                    <small class="text-muted"><i class="far fa-clock me-1"></i> 4 min read</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Donation CTA -->
+                    <div class="card border-0 shadow-sm mt-4 bg-gradient-danger text-white">
+                        <div class="card-body text-center p-4">
+                            <h5 class="fw-bold mb-3">Inspired to Donate?</h5>
+                            <p class="mb-4">Join our community of life-savers today</p>
+                            <a href="register.html" class="btn btn-light btn-lg w-100 mb-2">
+                                <i class="fas fa-heart me-2"></i>Become a Donor
+                            </a>
+                            <a href="campaigns.html" class="btn btn-outline-light btn-sm w-100">
+                                Find Nearby Campaigns
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="mb-4">
+                        <div class="logo-placeholder mb-3">
+                            <i class="fas fa-heartbeat fa-2x text-danger me-2"></i>
+                            <h3 class="fw-bold d-inline">Life<span class="text-danger">Flow</span></h3>
+                        </div>
+                        <p class="text-light mt-3">Sri Lanka's premier blood bank management system connecting donors with those in need.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4">
+                    <h5 class="fw-bold mb-4">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html" class="text-light text-decoration-none">Home</a></li>
+                        <li class="mb-2"><a href="about.html" class="text-light text-decoration-none">About Us</a></li>
+                        <li class="mb-2"><a href="services.html" class="text-light text-decoration-none">Services</a></li>
+                        <li class="mb-2"><a href="find-donors.html" class="text-light text-decoration-none">Find Donors</a></li>
+                        <li class="mb-2"><a href="campaigns.html" class="text-light text-decoration-none">Campaigns</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-4">
+                    <h5 class="fw-bold mb-4">Important Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="emergency.html" class="text-light text-decoration-none">Emergency Request</a></li>
+                        <li class="mb-2"><a href="blog.html" class="text-light text-decoration-none">Health Achievements</a></li>
+                        <li class="mb-2"><a href="contact.html" class="text-light text-decoration-none">Contact Us</a></li>
+                        <li class="mb-2"><a href="privacy.html" class="text-light text-decoration-none">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-4">
+                    <h5 class="fw-bold mb-4">Contact Info</h5>
+                    <ul class="list-unstyled text-light">
+                        <li class="mb-3">
+                            <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                            Faculty of Indigenous Health Sciences,<br>
+                            Gampaha Wickramarachchi University,<br>
+                            Sri Lanka
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-phone-alt text-danger me-2"></i>
+                            Emergency: 1990<br>
+                            General: +94 11 234 5678
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope text-danger me-2"></i>
+                            help@lifeflow.lk
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="bg-light my-5">
+
+            <div class="row">
+                
+                    <p class="text-center">&copy; 2025 LifeFlow Blood Management System. All rights reserved.</p>
+    
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="btn btn-danger rounded-circle position-fixed bottom-0 end-0 m-3" 
+            style="width: 50px; height: 50px; display: none; z-index: 1000;">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <script>
+        AOS.init();
+        
+        // Back to Top Button
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.style.display = 'flex';
+                backToTopBtn.style.alignItems = 'center';
+                backToTopBtn.style.justifyContent = 'center';
+            } else {
+                backToTopBtn.style.display = 'none';
+            }
+        });
+        
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Save Article Functionality
+        document.getElementById('saveArticle').addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('far')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                this.title = 'Remove from Saved';
+                showToast('Article saved for later!', 'success');
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                this.title = 'Save for Later';
+                showToast('Article removed from saved!', 'info');
+            }
+        });
+        
+        // Table of Contents Smooth Scrolling
+        document.querySelectorAll('.toc-item a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Comment Form Submission
+        document.getElementById('commentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showToast('Comment submitted successfully! It will appear after moderation.', 'success');
+            this.reset();
+        });
+        
+        // Share Buttons
+        document.querySelectorAll('.share-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const platform = this.classList[1].replace('share-', '');
+                let url = window.location.href;
+                let text = encodeURIComponent(document.title);
+                
+                switch(platform) {
+                    case 'facebook':
+                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+                        break;
+                    case 'twitter':
+                        window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+                        break;
+                    case 'linkedin':
+                        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+                        break;
+                    case 'whatsapp':
+                        window.open(`https://wa.me/?text=${text}%20${url}`, '_blank');
+                        break;
+                    case 'email':
+                        window.location.href = `mailto:?subject=${text}&body=${text}%0A%0A${url}`;
+                        break;
+                }
+                
+                showToast(`Shared via ${platform}!`, 'info');
+            });
+        });
+        
+        // Like/Dislike Buttons
+        document.querySelectorAll('.btn-outline-secondary').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                const count = this.textContent.trim();
+                
+                if (icon.classList.contains('fa-thumbs-up')) {
+                    if (this.classList.contains('btn-danger')) {
+                        this.classList.remove('btn-danger');
+                        this.classList.add('btn-outline-secondary');
+                        this.innerHTML = `<i class="fas fa-thumbs-up"></i> ${parseInt(count) - 1}`;
+                    } else {
+                        this.classList.remove('btn-outline-secondary');
+                        this.classList.add('btn-danger');
+                        this.innerHTML = `<i class="fas fa-thumbs-up"></i> ${parseInt(count) + 1}`;
+                    }
+                } else if (icon.classList.contains('fa-thumbs-down')) {
+                    if (this.classList.contains('btn-danger')) {
+                        this.classList.remove('btn-danger');
+                        this.classList.add('btn-outline-secondary');
+                        this.innerHTML = `<i class="fas fa-thumbs-down"></i> ${parseInt(count) - 1}`;
+                    } else {
+                        this.classList.remove('btn-outline-secondary');
+                        this.classList.add('btn-danger');
+                        this.innerHTML = `<i class="fas fa-thumbs-down"></i> ${parseInt(count) + 1}`;
+                    }
+                }
+            });
+        });
+        
+        // Toast Notification Function
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'danger' ? 'danger' : 'info'} border-0 position-fixed bottom-0 end-0 m-3`;
+            toast.style.zIndex = '9999';
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            toast.addEventListener('hidden.bs.toast', function() {
+                this.remove();
+            });
+        }
+        
+        // Print Article Functionality
+        const originalTitle = document.title;
+        window.addEventListener('beforeprint', function() {
+            document.title = `Print: ${originalTitle} - LifeFlow`;
+        });
+        
+        window.addEventListener('afterprint', function() {
+            document.title = originalTitle;
+        });
+        
+        // Read Time Estimation
+        function estimateReadTime() {
+            const articleText = document.querySelector('.article-content').textContent;
+            const wordCount = articleText.split(/\s+/).length;
+            const readTime = Math.ceil(wordCount / 200); // 200 words per minute
+            document.querySelector('.read-time').innerHTML = `<i class="far fa-clock me-1"></i> ${readTime} min read`;
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            estimateReadTime();
+            
+            // Add active class to current article in sidebar
+            const currentUrl = window.location.pathname;
+            if (currentUrl.includes('article-details')) {
+                document.querySelector('.nav-link[href="blog.html"]').classList.add('active');
+            }
+        });
+        
+        // Newsletter Subscription
+        document.querySelector('.newsletter-card form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            if (email) {
+                showToast('Thank you for subscribing to our newsletter!', 'success');
+                this.reset();
+            }
+        });
+        
+        // View Counter Simulation
+        let viewCount = localStorage.getItem('articleViews') || 2845;
+        viewCount = parseInt(viewCount) + 1;
+        localStorage.setItem('articleViews', viewCount);
+        document.querySelector('[title*="views"]').innerHTML = `<i class="fas fa-eye me-1"></i> ${viewCount.toLocaleString()} views`;
+    </script>
+</body>
+</html>

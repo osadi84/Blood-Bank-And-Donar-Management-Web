@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeFlow - Blood Bank & Donor Management System</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    <style>
+        .login-container {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .login-card {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .login-left {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .login-right {
+            padding: 50px;
+            background: white;
+        }
+        
+        .login-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .login-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .login-feature i {
+            color: #28a745;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .social-login-btn {
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .social-login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-google {
+            background: white;
+            border: 1px solid #ddd;
+            color: #444;
+        }
+        
+        .btn-facebook {
+            background: #3b5998;
+            border: 1px solid #3b5998;
+            color: white;
+        }
+        
+        .btn-apple {
+            background: #000;
+            border: 1px solid #000;
+            color: white;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: #6c757d;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .divider span {
+            padding: 0 15px;
+        }
+        
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .login-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .login-links a {
+            color: #e53935;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .login-links a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Password toggle position */
+        .password-field-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        
+        .password-field-wrapper input {
+            padding-right: 45px !important;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            z-index: 10;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .password-toggle:hover {
+            color: #e53935;
+        }
+        
+        .alert-message {
+            display: none;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        
+        .alert-message.show {
+            display: block;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .loading-spinner.active {
+            display: block;
+        }
+        
+        .input-icon {
+            position: relative;
+        }
+        
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            z-index: 10;
+        }
+        
+        .input-icon input {
+            padding-left: 45px !important;
+        }
+        
+        .form-control:focus {
+            border-color: #e53935;
+            box-shadow: 0 0 0 0.2rem rgba(229, 57, 53, 0.25);
+        }
+        
+        @media (max-width: 768px) {
+            .login-left {
+                padding: 30px;
+                text-align: center;
+            }
+            
+            .login-right {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar bg-dark text-white py-2">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <span><i class="fas fa-phone-alt me-2"></i>Emergency: 1990</span>
+                        <span><i class="fas fa-envelope me-2"></i>help@lifeflow.lk</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="d-inline-flex align-items-center gap-3">
+                        <div class="theme-switch">
+                            <button class="btn btn-sm btn-outline-light" id="themeToggle">
+                                <i class="fas fa-moon"></i>
+                            </button>
+                        </div>
+                        <a href="login.html" class="text-white text-decoration-none">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a href="register.html" class="btn btn-danger btn-sm">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand" href="index.html">
+                <img src="https://img.freepik.com/premium-vector/blood-donation-logo-design-vector_369465-218.jpg" alt="LifeFlow Logo" height="40">
+                <span class="brand-name">Life<span class="text-danger">Flow</span></span>
+            </a>
+
+            <!-- Nav Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nav Items -->
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="find-donor.html">Find Donors</a></li>
+                    <li class="nav-item"><a class="nav-link" href="campaigns.html">Campaigns</a></li>
+                    <li class="nav-item"><a class="nav-link" href="blog.html">Achievements</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Login Section -->
+    <section class="py-5">
+        <div class="container login-container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="login-card" data-aos="fade-up">
+                        <div class="row g-0">
+                            <!-- Left Side - Welcome -->
+                            <div class="col-lg-6 login-left">
+                                <div class="login-icon text-center">
+                                    <i class="fas fa-heartbeat"></i>
+                                </div>
+                                <h2 class="fw-bold text-center mb-4">Welcome Back!</h2>
+                                <p class="text-center mb-5">
+                                    Login to access your donor dashboard, manage your profile, and continue saving lives.
+                                </p>
+                                
+                                <div class="login-features">
+                                    <div class="login-feature">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Access your donation history</span>
+                                    </div>
+                                    <div class="login-feature">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Update health information</span>
+                                    </div>
+                                    <div class="login-feature">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Receive emergency alerts</span>
+                                    </div>
+                                    <div class="login-feature">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Schedule appointments</span>
+                                    </div>
+                                    <div class="login-feature">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Track your impact</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-5 text-center">
+                                    <p class="mb-2">New to LifeFlow?</p>
+                                    <a href="register.html" class="btn btn-outline-light btn-lg px-4">
+                                        <i class="fas fa-user-plus me-2"></i>Create Account
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Right Side - Login Form -->
+                            <div class="col-lg-6 login-right">
+                                <h2 class="fw-bold mb-1">Sign In</h2>
+                                <p class="text-muted mb-4">Enter your credentials to access your account</p>
+                                
+                                <!-- Alert Message -->
+                                <div class="alert alert-danger alert-message" id="alertMessage" role="alert">
+                                    <i class="fas fa-exclamation-circle me-2"></i>
+                                    <span id="alertText"></span>
+                                </div>
+                                
+                                <!-- Loading Spinner -->
+                                <div class="loading-spinner" id="loadingSpinner">
+                                    <div class="spinner-border text-danger" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-2">Signing in...</p>
+                                </div>
+                                
+                                <!-- Login Form -->
+                                <form id="loginForm">
+                                    <!-- Username/Email field -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Username or Email *</label>
+                                        <input type="text" class="form-control" id="loginInput" 
+                                               placeholder="Enter your username or email" required>
+                                    </div>
+                                    
+                                    <!-- Password field -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Password *</label>
+                                        <div class="password-field-wrapper">
+                                            <input type="password" class="form-control" id="loginPassword" 
+                                                   placeholder="Enter your password" required>
+                                            <button type="button" class="password-toggle" id="toggleLoginPassword">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="remember-forgot">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="rememberMe">
+                                            <label class="form-check-label" for="rememberMe">
+                                                Remember me
+                                            </label>
+                                        </div>
+                                        <a href="forgot-password.html" class="text-danger text-decoration-none">
+                                            Forgot password?
+                                        </a>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-danger btn-lg w-100 mb-3" id="loginBtn">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                                    </button>
+                                    
+                                    <div class="text-center mb-3">
+                                        <a href="Emergency request.html" class="text-danger text-decoration-none">
+                                            <i class="fas fa-ambulance me-1"></i>Emergency Blood Request
+                                        </a>
+                                    </div>
+                                    
+                                    <div class="login-links">
+                                        <p class="mb-2">
+                                            Don't have an account? 
+                                            <a href="register.html">Sign up now</a>
+                                        </p>
+                                        <p class="mb-0">
+                                            Need help? 
+                                            <a href="contact.html">Contact Support</a>
+                                        </p>
+                                    </div>
+                                </form>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+<footer class="bg-dark text-white pt-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="mb-4 d-flex align-items-center gap-3">
+                    <!-- Your Blood Logo from folder - Increased Size -->
+                    <img src="blood logo.png" alt="LifeFlow Blood Logo" height="120" width="120" style="object-fit: contain;" class="mb-3">
+                    <div>
+                        <h2 class="fw-bold mb-0" style="font-size: 2.5rem;">Life<span class="text-danger">Flow</span></h2>
+                        <p class="text-light mt-2 mb-0" style="font-size: 1rem;">Saving Lives Together</p>
+                    </div>
+                </div>
+                <p class="text-light mt-3">Sri Lanka's premier blood bank management system connecting donors with those in need.</p>
+                
+                <div class="social-links d-flex gap-3 mt-4">
+                    <a href="https://www.facebook.com/lifeflow.lk" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Facebook" title="Follow us on Facebook" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://twitter.com/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Twitter" title="Follow us on Twitter" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Instagram" title="Follow us on Instagram" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on LinkedIn" title="Follow us on LinkedIn" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on YouTube" title="Follow us on YouTube" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-4">
+                <h5 class="fw-bold mb-4">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="index.html" class="text-light text-decoration-none hover-effect">Home</a></li>
+                    <li class="mb-2"><a href="pages/about.html" class="text-light text-decoration-none hover-effect">About Us</a></li>
+                    <li class="mb-2"><a href="pages/services.html" class="text-light text-decoration-none hover-effect">Services</a></li>
+                    <li class="mb-2"><a href="pages/donors.html" class="text-light text-decoration-none hover-effect">Find Donors</a></li>
+                    <li class="mb-2"><a href="pages/campaigns.html" class="text-light text-decoration-none hover-effect">Campaigns</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <h5 class="fw-bold mb-4">Important Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="pages/emergency.html" class="text-light text-decoration-none hover-effect">Emergency Request</a></li>
+                    <li class="mb-2"><a href="blog.html" class="text-light text-decoration-none hover-effect">Health Achievements</a></li>
+                    <li class="mb-2"><a href="contact.html" class="text-light text-decoration-none hover-effect">Contact Us</a></li>
+                    <li class="mb-2"><a href="terms.html" class="text-light text-decoration-none hover-effect">Terms & Conditions</a></li>
+                    <li class="mb-2"><a href="privacy.html" class="text-light text-decoration-none hover-effect">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <h5 class="fw-bold mb-4">Contact Info</h5>
+                <ul class="list-unstyled text-light">
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-map-marker-alt text-danger me-3 mt-1"></i>
+                        <span>Faculty of Indigenous Health Sciences and Technology,<br>
+                        Gampaha Wickramarachchi University of Indigenous Medicine,<br>
+                        Sri Lanka</span>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-phone-alt text-danger me-3"></i>
+                        <span>Emergency: 1990<br>
+                        General: +94 11 234 5678</span>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-envelope text-danger me-3"></i>
+                        <span>help@lifeflow.lk</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="bg-light my-5" style="opacity: 0.2;">
+
+        <div class="row">
+            <div class="col-12 text-center">
+               <p class="mb-0">&copy; 2025 LifeFlow Blood Management System. All rights reserved. <span class="text-danger">🩸</span> Saving lives together.</p>
+        </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            setPersistence, 
+            browserLocalPersistence, 
+            browserSessionPersistence 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, query, where, getDocs, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAqUpugEG4CABz266QBIE_ldWgR1eWPXqk",
+            authDomain: "blood-bank-website-c2625.firebaseapp.com",
+            projectId: "blood-bank-website-c2625",
+            storageBucket: "blood-bank-website-c2625.firebasestorage.app",
+            messagingSenderId: "778577693727",
+            appId: "1:778577693727:web:4818be5b9cef354c4d192a",
+            measurementId: "G-3XL1ZGCJ1R"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Initialize AOS
+        AOS.init();
+
+        // Password toggle
+        document.getElementById('toggleLoginPassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('loginPassword');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            const icon = this.querySelector('i');
+            if (icon) {
+                icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+            }
+        });
+
+        // Check if already logged in
+        const userToken = localStorage.getItem('userToken') || sessionStorage.getItem('userToken');
+        if (userToken) {
+            window.location.href = 'dashboard.html';
+        }
+
+        // Load remembered username/email
+        if (localStorage.getItem('rememberMe') === 'true') {
+            const savedInput = localStorage.getItem('loginInput');
+            if (savedInput) {
+                document.getElementById('loginInput').value = savedInput;
+                document.getElementById('rememberMe').checked = true;
+            }
+        }
+
+        // Function to find user by username
+        async function findUserByUsername(username) {
+            try {
+                const usersRef = collection(db, "donors");
+                const q = query(usersRef, where("username", "==", username));
+                const querySnapshot = await getDocs(q);
+                
+                if (!querySnapshot.empty) {
+                    const userDoc = querySnapshot.docs[0];
+                    return userDoc.data().email;
+                }
+                return null;
+            } catch (error) {
+                console.error("Error finding user:", error);
+                return null;
+            }
+        }
+
+        // Login form submit
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loginInput = document.getElementById('loginInput').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            // Validation
+            if (!loginInput || !password) {
+                showAlert('Please enter both username/email and password');
+                return;
+            }
+            
+            // Show loading
+            showLoading(true);
+            
+            try {
+                let email = loginInput;
+                
+                // Check if input is email or username
+                if (!loginInput.includes('@')) {
+                    // Try to find email by username
+                    const foundEmail = await findUserByUsername(loginInput);
+                    if (foundEmail) {
+                        email = foundEmail;
+                    } else {
+                        // If username not found, show error
+                        showAlert('Username not found. Please check your username or use email.');
+                        showLoading(false);
+                        return;
+                    }
+                }
+                
+                // Set persistence
+                await setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence);
+                
+                // Sign in
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Update last login
+                try {
+                    const userRef = doc(db, "donors", user.uid);
+                    await updateDoc(userRef, {
+                        lastLogin: serverTimestamp(),
+                        lastLoginDate: new Date().toISOString()
+                    });
+                } catch (error) {
+                    console.log("Error updating last login:", error);
+                }
+                
+                // Store user data
+                const userData = {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName || loginInput
+                };
+                
+                if (rememberMe) {
+                    localStorage.setItem('userToken', user.accessToken);
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                    localStorage.setItem('loginInput', loginInput);
+                    localStorage.setItem('rememberMe', 'true');
+                } else {
+                    sessionStorage.setItem('userToken', user.accessToken);
+                    sessionStorage.setItem('userData', JSON.stringify(userData));
+                    localStorage.setItem('rememberMe', 'false');
+                }
+                
+                // Redirect
+                window.location.href = 'dashboard.html';
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                
+                let errorMessage = 'Login failed. ';
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                        errorMessage += 'Invalid email address.';
+                        break;
+                    case 'auth/user-disabled':
+                        errorMessage += 'This account has been disabled.';
+                        break;
+                    case 'auth/user-not-found':
+                        errorMessage += 'No account found with this email.';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage += 'Incorrect password.';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage += 'Too many failed attempts. Try again later.';
+                        break;
+                    default:
+                        errorMessage += error.message;
+                }
+                
+                showAlert(errorMessage);
+                showLoading(false);
+            }
+        });
+
+        // Helper functions
+        function showAlert(message) {
+            const alert = document.getElementById('alertMessage');
+            const alertText = document.getElementById('alertText');
+            
+            alertText.textContent = message;
+            alert.classList.add('show');
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+
+        function showLoading(show) {
+            const spinner = document.getElementById('loadingSpinner');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            if (show) {
+                spinner.classList.add('active');
+                loginBtn.disabled = true;
+            } else {
+                spinner.classList.remove('active');
+                loginBtn.disabled = false;
+            }
+        }
+
+        // Theme toggle
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-bs-theme', newTheme);
+            this.innerHTML = newTheme === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+        });
+    </script>
+</body>
+</html>

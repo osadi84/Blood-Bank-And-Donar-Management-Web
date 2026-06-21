@@ -1,0 +1,389 @@
+   
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeFlow - Blood Bank & Donor Management System</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+</head>
+ <!-- Top Bar -->
+    <div class="top-bar bg-dark text-white py-2">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <span><i class="fas fa-phone-alt me-2"></i>Emergency: 1990</span>
+                        <span><i class="fas fa-envelope me-2"></i>help@lifeflow.lk</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="d-inline-flex align-items-center gap-3">
+                        <div class="theme-switch">
+                            <button class="btn btn-sm btn-outline-light" id="themeToggle">
+                                <i class="fas fa-moon"></i>
+                            </button>
+                        </div>
+                        <a href="login.html" class="text-white text-decoration-none">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a href="register.html" class="btn btn-danger btn-sm">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand" href="index.html">
+                <img src="https://img.freepik.com/premium-vector/blood-donation-logo-design-vector_369465-218.jpg" alt="LifeFlow Logo" height="40">
+                <span class="brand-name">Life<span class="text-danger">Flow</span></span>
+            </a>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="d-none d-lg-flex mx-auto" style="width: 400px;">
+                <div class="input-group search-box">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0" 
+                           id="globalSearch" 
+                           placeholder="Search for services, donors, hospitals..."
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                    <button class="btn btn-danger" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
+                    <!-- Search Results Dropdown -->
+                    <ul class="dropdown-menu w-100" id="searchResults">
+                        <li><h6 class="dropdown-header">Quick Actions</h6></li>
+                        <li><a class="dropdown-item" href="pages/donors.html"><i class="fas fa-users me-2"></i>Find Donors</a></li>
+                        <li><a class="dropdown-item" href="pages/emergency.html"><i class="fas fa-ambulance me-2"></i>Emergency Request</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><h6 class="dropdown-header">Services</h6></li>
+                        <li><a class="dropdown-item" href="pages/services.html#blood-test"><i class="fas fa-vial me-2"></i>Blood Testing</a></li>
+                        <li><a class="dropdown-item" href="pages/services.html#donation"><i class="fas fa-hand-holding-heart me-2"></i>Donation Camp</a></li>
+                        <li><a class="dropdown-item" href="pages/services.html#storage"><i class="fas fa-boxes me-2"></i>Blood Storage</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Nav Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nav Items -->
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="find-donor.html">Find Donors</a></li>
+                    <li class="nav-item"><a class="nav-link" href="campaigns.html">Campaigns</a></li>
+                    <li class="nav-item"><a class="nav-link" href="blog.html">Achievements</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    
+                    <!-- Mobile Search -->
+                    <li class="nav-item d-lg-none mt-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <button class="btn btn-danger" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Contact Hero -->
+    <section class="contact-hero py-5 bg-gradient-primary ">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+                    <h1 class="display-3 fw-bold mb-4">Get In Touch</h1>
+                    <p class="lead mb-4">We're here to help. Contact us for inquiries, support, or partnership opportunities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Info -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4" data-aos="fade-up">
+                    <div class="contact-info-card text-center p-4 rounded-4 shadow-sm">
+                        <div class="contact-icon mb-3">
+                            <i class="fas fa-phone-alt fa-3x text-danger"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Call Us</h4>
+                        <p class="text-muted mb-2">Emergency Hotline</p>
+                        <h5 class="fw-bold text-danger">1990</h5>
+                        <p class="text-muted mb-2">General Inquiries</p>
+                        <h5 class="fw-bold">+94 11 234 5678</h5>
+                        <p class="text-muted mt-3">Available 24/7 for emergencies</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="contact-info-card text-center p-4 rounded-4 shadow-sm">
+                        <div class="contact-icon mb-3">
+                            <i class="fas fa-envelope fa-3x text-danger"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Email Us</h4>
+                        <p class="text-muted mb-2">General Support</p>
+                        <h5 class="fw-bold">help@lifeflow.lk</h5>
+                        <p class="text-muted mb-2">Partnerships</p>
+                        <h5 class="fw-bold">partners@lifeflow.lk</h5>
+                        <p class="text-muted mt-3">Response within 24 hours</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="contact-info-card text-center p-4 rounded-4 shadow-sm">
+                        <div class="contact-icon mb-3">
+                            <i class="fas fa-map-marker-alt fa-3x text-danger"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Visit Us</h4>
+                        <p class="text-muted mb-2">Head Office</p>
+                        <h5 class="fw-bold">Faculty of Indigenous Health Sciences</h5>
+                        <p class="text-muted">Gampaha Wickramarachchi University of Indigenous Medicine<br>Sri Lanka</p>
+                        <p class="text-muted mt-3">Open: Mon-Fri, 8:00 AM - 5:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-body p-5">
+                            <h3 class="fw-bold mb-4">Send us a Message</h3>
+                            <form>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Full Name *</label>
+                                        <input type="text" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email Address *</label>
+                                        <input type="email" class="form-control" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Subject</label>
+                                        <select class="form-select">
+                                            <option>General Inquiry</option>
+                                            <option>Blood Donation</option>
+                                            <option>Emergency Request</option>
+                                            <option>Partnership Opportunity</option>
+                                            <option>Technical Support</option>
+                                            <option>Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Message *</label>
+                                        <textarea class="form-control" rows="5" required></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="newsletter">
+                                            <label class="form-check-label" for="newsletter">
+                                                Subscribe to our newsletter for updates
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-danger btn-lg px-5">
+                                            <i class="fas fa-paper-plane me-2"></i>Send Message
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-5">
+        <div class="container">
+            <h3 class="fw-bold text-center mb-5">Frequently Asked Questions</h3>
+            
+            <div class="accordion" id="faqAccordion">
+                <!-- FAQ 1 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            How do I register as a blood donor?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            You can register as a blood donor by visiting our registration page and filling out the online form. The process takes about 5 minutes. Once registered, you'll be added to our donor database and can be contacted during emergencies.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            How quickly can you respond to emergency blood requests?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Our average emergency response time is 45 minutes. We use GPS technology to locate the nearest compatible donors and send immediate alerts. In critical cases, we can mobilize donors within 30 minutes.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            Can hospitals partner with your system?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Yes, we welcome hospital partnerships. Hospitals can integrate with our system to access our donor network, manage inventory, and use our emergency alert system. Contact our partnership team for more information.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+<footer class="bg-dark text-white pt-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="mb-4 d-flex align-items-center gap-3">
+                    <!-- Your Blood Logo from folder - Increased Size -->
+                    <img src="blood logo.png" alt="LifeFlow Blood Logo" height="120" width="120" style="object-fit: contain;" class="mb-3">
+                    <div>
+                        <h2 class="fw-bold mb-0" style="font-size: 2.5rem;">Life<span class="text-danger">Flow</span></h2>
+                        <p class="text-light mt-2 mb-0" style="font-size: 1rem;">Saving Lives Together</p>
+                    </div>
+                </div>
+                <p class="text-light mt-3">Sri Lanka's premier blood bank management system connecting donors with those in need.</p>
+                
+                <div class="social-links d-flex gap-3 mt-4">
+                    <a href="https://www.facebook.com/lifeflow.lk" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Facebook" title="Follow us on Facebook" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://twitter.com/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Twitter" title="Follow us on Twitter" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Instagram" title="Follow us on Instagram" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on LinkedIn" title="Follow us on LinkedIn" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on YouTube" title="Follow us on YouTube" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-4">
+                <h5 class="fw-bold mb-4">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="index.html" class="text-light text-decoration-none hover-effect">Home</a></li>
+                    <li class="mb-2"><a href="pages/about.html" class="text-light text-decoration-none hover-effect">About Us</a></li>
+                    <li class="mb-2"><a href="pages/services.html" class="text-light text-decoration-none hover-effect">Services</a></li>
+                    <li class="mb-2"><a href="pages/donors.html" class="text-light text-decoration-none hover-effect">Find Donors</a></li>
+                    <li class="mb-2"><a href="pages/campaigns.html" class="text-light text-decoration-none hover-effect">Campaigns</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <h5 class="fw-bold mb-4">Important Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="pages/emergency.html" class="text-light text-decoration-none hover-effect">Emergency Request</a></li>
+                    <li class="mb-2"><a href="blog.html" class="text-light text-decoration-none hover-effect">Health Achievements</a></li>
+                    <li class="mb-2"><a href="contact.html" class="text-light text-decoration-none hover-effect">Contact Us</a></li>
+                    <li class="mb-2"><a href="terms.html" class="text-light text-decoration-none hover-effect">Terms & Conditions</a></li>
+                    <li class="mb-2"><a href="privacy.html" class="text-light text-decoration-none hover-effect">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <h5 class="fw-bold mb-4">Contact Info</h5>
+                <ul class="list-unstyled text-light">
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-map-marker-alt text-danger me-3 mt-1"></i>
+                        <span>Faculty of Indigenous Health Sciences and Technology,<br>
+                        Gampaha Wickramarachchi University of Indigenous Medicine,<br>
+                        Sri Lanka</span>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-phone-alt text-danger me-3"></i>
+                        <span>Emergency: 1990<br>
+                        General: +94 11 234 5678</span>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-envelope text-danger me-3"></i>
+                        <span>help@lifeflow.lk</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="bg-light my-5" style="opacity: 0.2;">
+
+        <div class="row">
+            <div class="col-12 text-center">
+               <p class="mb-0">&copy; 2025 LifeFlow Blood Management System. All rights reserved. <span class="text-danger">🩸</span> Saving lives together.</p>
+        </div>
+        </div>
+    </div>
+</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+</html>

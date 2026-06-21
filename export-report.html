@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export Report - Blood Bank System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #dc3545;
+            --secondary: #6c757d;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark);
+        }
+
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--primary) !important;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #b82e3a 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            opacity: 0.9;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .export-option {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .export-option:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .export-option input[type="radio"] {
+            margin-right: 1rem;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
+
+        .export-option.selected {
+            background-color: rgba(220, 53, 69, 0.05);
+            border-color: var(--primary);
+        }
+
+        .export-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-right: 1rem;
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .option-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .option-description {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-left: 2rem;
+        }
+
+        .filter-section {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .filter-group {
+            margin-bottom: 1rem;
+        }
+
+        .filter-group label {
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control,
+        .form-select {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+
+        .stats-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(220, 53, 69, 0.05));
+            border: 1px solid rgba(220, 53, 69, 0.2);
+            border-radius: 6px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--secondary);
+        }
+
+        .btn-primary-custom {
+            background-color: var(--primary);
+            border: none;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary-custom:hover {
+            background-color: #b82e3a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-secondary-custom {
+            background-color: var(--secondary);
+            border: none;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-secondary-custom:hover {
+            background-color: #5a6268;
+        }
+
+        .alert-info {
+            background-color: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            color: var(--primary);
+            border-radius: 6px;
+            padding: 1rem;
+        }
+
+        .success-message {
+            display: none;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .checklist i {
+            color: var(--success);
+            margin-right: 0.75rem;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .form-section {
+                padding: 1.5rem;
+            }
+
+            .stats-preview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="fas fa-heart" style="color: var(--primary);"></i> Blood Bank
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="donation-history.html">History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">Profile</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-download me-2"></i>Export Donation Report</h1>
+            <p>Download your donation history and records in your preferred format</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle me-2"></i>Your report has been exported successfully! Check your downloads folder.
+                </div>
+
+                <!-- Data Preview -->
+                <div class="form-section">
+                    <h5 class="section-title">
+                        <i class="fas fa-chart-bar me-2"></i>Report Preview
+                    </h5>
+                    <div class="stats-preview">
+                        <div class="stat-box">
+                            <div class="stat-number">8</div>
+                            <div class="stat-label">Total Donations</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">3.6L</div>
+                            <div class="stat-label">Blood Donated</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">24</div>
+                            <div class="stat-label">Lives Impacted</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">2 yrs</div>
+                            <div class="stat-label">Member Since</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Options -->
+                <div class="form-section">
+                    <h5 class="section-title">
+                        <i class="fas fa-filter me-2"></i>Filter Report Data
+                    </h5>
+                    
+                    <div class="filter-section">
+                        <div class="filter-title">Date Range</div>
+                        <div class="filter-group">
+                            <label>From Date</label>
+                            <input type="date" class="form-control" id="fromDate">
+                        </div>
+                        <div class="filter-group">
+                            <label>To Date</label>
+                            <input type="date" class="form-control" id="toDate">
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <div class="filter-title">Report Type</div>
+                        <div class="filter-group">
+                            <select class="form-select" id="reportType">
+                                <option value="all">All Donations</option>
+                                <option value="completed">Completed Donations Only</option>
+                                <option value="scheduled">Scheduled Donations Only</option>
+                                <option value="cancelled">Cancelled Donations Only</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <div class="filter-title">Include Information</div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="includeHealth" checked>
+                            <label class="form-check-label" for="includeHealth">
+                                Health Records
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="includeStats" checked>
+                            <label class="form-check-label" for="includeStats">
+                                Donation Statistics
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="includeRewards" checked>
+                            <label class="form-check-label" for="includeRewards">
+                                Rewards & Badges
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Format Selection -->
+                <div class="form-section">
+                    <h5 class="section-title">
+                        <i class="fas fa-file me-2"></i>Select Export Format
+                    </h5>
+
+                    <label class="export-option" onclick="selectFormat('pdf', this)">
+                        <input type="radio" name="format" value="pdf" checked>
+                        <div class="option-header">
+                            <i class="fas fa-file-pdf export-icon"></i>
+                            <span class="option-title">PDF Document</span>
+                        </div>
+                        <div class="option-description">
+                            Professional formatted report, best for printing and sharing
+                        </div>
+                    </label>
+
+                    <label class="export-option" onclick="selectFormat('excel', this)">
+                        <input type="radio" name="format" value="excel">
+                        <div class="option-header">
+                            <i class="fas fa-file-excel export-icon"></i>
+                            <span class="option-title">Excel Spreadsheet</span>
+                        </div>
+                        <div class="option-description">
+                            Editable spreadsheet for further analysis and calculations
+                        </div>
+                    </label>
+
+                    <label class="export-option" onclick="selectFormat('csv', this)">
+                        <input type="radio" name="format" value="csv">
+                        <div class="option-header">
+                            <i class="fas fa-file-csv export-icon"></i>
+                            <span class="option-title">CSV File</span>
+                        </div>
+                        <div class="option-description">
+                            Comma-separated values for universal compatibility
+                        </div>
+                    </label>
+
+                    <label class="export-option" onclick="selectFormat('json', this)">
+                        <input type="radio" name="format" value="json">
+                        <div class="option-header">
+                            <i class="fas fa-code export-icon"></i>
+                            <span class="option-title">JSON Format</span>
+                        </div>
+                        <div class="option-description">
+                            Structured data format for technical applications
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="form-section">
+                    <div class="d-flex gap-2">
+                        <button class="btn-primary-custom" id="exportBtn">
+                            <i class="fas fa-download me-2"></i>Export Now
+                        </button>
+                        <a href="dashboard.html" class="btn-secondary-custom">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="col-lg-4">
+                <!-- Information -->
+                <div class="form-section">
+                    <h5 class="section-title">
+                        <i class="fas fa-info-circle me-2"></i>About This Report
+                    </h5>
+                    <ul class="checklist">
+                        <li>
+                            <i class="fas fa-check"></i>
+                            Contains all your donation records
+                        </li>
+                        <li>
+                            <i class="fas fa-check"></i>
+                            Includes health check details
+                        </li>
+                        <li>
+                            <i class="fas fa-check"></i>
+                            Shows your achievements and badges
+                        </li>
+                        <li>
+                            <i class="fas fa-check"></i>
+                            Protected with privacy controls
+                        </li>
+                        <li>
+                            <i class="fas fa-check"></i>
+                            Can be shared with medical institutions
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Privacy Notice -->
+                <div class="alert-info">
+                    <i class="fas fa-lock me-2"></i>
+                    <strong>Privacy & Security</strong>
+                    <p class="small mb-0 mt-2">Your data is encrypted and secure. This export is for your personal use only.</p>
+                </div>
+
+                <!-- Tips -->
+                <div class="form-section">
+                    <h5 class="section-title">
+                        <i class="fas fa-lightbulb me-2"></i>Tips
+                    </h5>
+                    <ul class="checklist">
+                        <li>
+                            <i class="fas fa-check"></i>
+                            <small>Use PDF for official records</small>
+                        </li>
+                        <li>
+                            <i class="fas fa-check"></i>
+                            <small>Use Excel for data analysis</small>
+                        </li>
+                        <li>
+                            <i class="fas fa-check"></i>
+                            <small>Keep backups in safe location</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Blood Bank Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Set default dates
+        const today = new Date();
+        const oneYearAgo = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+        
+        document.getElementById('toDate').valueAsDate = today;
+        document.getElementById('fromDate').valueAsDate = oneYearAgo;
+
+        function selectFormat(format, element) {
+            document.querySelectorAll('.export-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            document.querySelector(`input[value="${format}"]`).checked = true;
+        }
+
+        // Initialize first option as selected
+        document.querySelector('.export-option').classList.add('selected');
+
+        const successMessage = document.getElementById('successMessage');
+        if (successMessage) {
+            successMessage.style.display = 'none';
+        }
+
+        const getReportData = () => ({
+            fromDate: document.getElementById('fromDate').value,
+            toDate: document.getElementById('toDate').value,
+            reportType: document.getElementById('reportType').value,
+            includeHealth: document.getElementById('includeHealth').checked,
+            includeStats: document.getElementById('includeStats').checked,
+            includeRewards: document.getElementById('includeRewards').checked,
+            summary: {
+                totalDonations: document.querySelector('.stat-box:nth-child(1) .stat-number')?.textContent || '0',
+                totalBlood: document.querySelector('.stat-box:nth-child(2) .stat-number')?.textContent || '0',
+                livesImpacted: document.querySelector('.stat-box:nth-child(3) .stat-number')?.textContent || '0',
+                memberSince: document.querySelector('.stat-box:nth-child(4) .stat-number')?.textContent || '0',
+            }
+        });
+
+        const createReportText = (data) => {
+            return `Donation Report\n\nDate range: ${data.fromDate} to ${data.toDate}\nReport type: ${data.reportType}\nIncluded: ${data.includeHealth ? 'Health Records, ' : ''}${data.includeStats ? 'Donation Statistics, ' : ''}${data.includeRewards ? 'Rewards & Badges' : ''}\n\nTotal Donations: ${data.summary.totalDonations}\nBlood Donated: ${data.summary.totalBlood}\nLives Impacted: ${data.summary.livesImpacted}\nMember Since: ${data.summary.memberSince}\n`;
+        };
+
+        const downloadBlob = (blob, filename) => {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+        };
+
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            const format = document.querySelector('input[name="format"]:checked').value;
+            const data = getReportData();
+
+            if (!data.fromDate || !data.toDate) {
+                alert('Please select both from and to dates');
+                return;
+            }
+
+            const filenameBase = `donation-report-${data.fromDate}-to-${data.toDate}`;
+            let blob;
+            let filename;
+
+            if (format === 'pdf' && window.jspdf) {
+                const doc = new window.jspdf.jsPDF();
+                const lines = createReportText(data).split('\n');
+                doc.setFontSize(16);
+                doc.text('Donation Report', 20, 20);
+                doc.setFontSize(11);
+                lines.forEach((line, index) => {
+                    if (line.trim() === '') return;
+                    doc.text(line, 20, 35 + index * 7);
+                });
+                blob = doc.output('blob');
+                filename = `${filenameBase}.pdf`;
+            } else if (format === 'json') {
+                blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                filename = `${filenameBase}.json`;
+            } else {
+                const reportText = createReportText(data);
+                if (format === 'excel' || format === 'csv') {
+                    const csv = `Date Range,${data.fromDate} to ${data.toDate}\nReport Type,${data.reportType}\nIncluded,${data.includeHealth ? 'Health Records; ' : ''}${data.includeStats ? 'Donation Statistics; ' : ''}${data.includeRewards ? 'Rewards & Badges' : ''}\n\nTotal Donations,${data.summary.totalDonations}\nBlood Donated,${data.summary.totalBlood}\nLives Impacted,${data.summary.livesImpacted}\nMember Since,${data.summary.memberSince}\n`;
+                    blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    filename = `${filenameBase}.csv`;
+                } else {
+                    blob = new Blob([reportText], { type: 'application/msword' });
+                    filename = `${filenameBase}.doc`;
+                }
+            }
+
+            downloadBlob(blob, filename);
+            if (successMessage) {
+                successMessage.textContent = `Download started: ${filename}`;
+                successMessage.style.display = 'block';
+            }
+        });
+        });
+    </script>
+</body>
+</html>

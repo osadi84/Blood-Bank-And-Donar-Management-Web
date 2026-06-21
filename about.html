@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeFlow - Blood Bank & Donor Management System</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    <style>
+        /* Remove unwanted top spacing */
+    body {
+    margin: 0;
+    padding: 0;
+    }
+
+    .navbar {
+    margin-bottom: 0;
+    }
+
+    .about-hero {
+    padding-top: 0 !important;
+    }
+    /* ================= TIMELINE ================= */
+
+.story-timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+/* Vertical line */
+.story-timeline::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        #dc3545,
+        rgba(220, 53, 69, 0.2)
+    );
+    border-radius: 5px;
+}
+
+/* Timeline item */
+.timeline-item {
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 40px;
+}
+
+/* Dot */
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -1px;
+    top: 8px;
+    width: 16px;
+    height: 16px;
+    background: #dc3545;
+    border-radius: 50%;
+    box-shadow: 0 0 0 6px rgba(220, 53, 69, 0.15);
+}
+
+/* Year */
+.timeline-date {
+    font-weight: 700;
+    color: #dc3545;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+/* Content card */
+.timeline-content {
+    background: #fff;
+    padding: 18px 22px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timeline-content h5 {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.timeline-content p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Hover effect */
+.timeline-content:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .story-timeline {
+        padding-left: 20px;
+    }
+
+    .timeline-item {
+        padding-left: 30px;
+    }
+
+    .story-timeline::before {
+        left: 8px;
+    }
+}
+.team-card .avatar-placeholder {
+    width: 100px;
+    height: 100px;
+    font-size: 2rem;
+}
+
+.row.justify-content-center > .col-md-2 {
+    display: flex;
+    justify-content: center;
+}
+
+
+
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar bg-dark text-white py-2">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <span><i class="fas fa-phone-alt me-2"></i>Emergency: 1990</span>
+                        <span><i class="fas fa-envelope me-2"></i>help@lifeflow.lk</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="d-inline-flex align-items-center gap-3">
+                        <div class="theme-switch">
+                            <button class="btn btn-sm btn-outline-light" id="themeToggle">
+                                <i class="fas fa-moon"></i>
+                            </button>
+                        </div>
+                        <a href="login.html" class="text-white text-decoration-none">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a href="register.html" class="btn btn-danger btn-sm">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand" href="index.html">
+                <img src="https://img.freepik.com/premium-vector/blood-donation-logo-design-vector_369465-218.jpg" alt="LifeFlow Logo" height="40">
+                <span class="brand-name">Life<span class="text-danger">Flow</span></span>
+            </a>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="d-none d-lg-flex mx-auto" style="width: 400px;">
+                <div class="input-group search-box">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0" 
+                           id="globalSearch" 
+                           placeholder="Search for services, donors, hospitals..."
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                    <button class="btn btn-danger" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
+                    <!-- Search Results Dropdown -->
+                    <ul class="dropdown-menu w-100" id="searchResults">
+                        <li><h6 class="dropdown-header">Quick Actions</h6></li>
+                        <li><a class="dropdown-item" href="pages/donors.html"><i class="fas fa-users me-2"></i>Find Donors</a></li>
+                        <li><a class="dropdown-item" href="pages/emergency.html"><i class="fas fa-ambulance me-2"></i>Emergency Request</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><h6 class="dropdown-header">Services</h6></li>
+                        <li><a class="dropdown-item" href="pages/services.html#blood-test"><i class="fas fa-vial me-2"></i>Blood Testing</a></li>
+                        <li><a class="dropdown-item" href="pages/services.html#donation"><i class="fas fa-hand-holding-heart me-2"></i>Donation Camp</a></li>
+                        <li><a class="dropdown-item" href="pages/services.html#storage"><i class="fas fa-boxes me-2"></i>Blood Storage</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Nav Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nav Items -->
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="find-donor.html">Find Donors</a></li>
+                    <li class="nav-item"><a class="nav-link" href="campaigns.html">Campaigns</a></li>
+                    <li class="nav-item"><a class="nav-link" href="blog.html">Achievements</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    
+                    <!-- Mobile Search -->
+                    <li class="nav-item d-lg-none mt-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <button class="btn btn-danger" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- About Hero -->
+    <section class="about-hero py-5 bg-gradient-dark text-white">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h1 class="display-3 fw-bold mb-4" style="color:#444;">Our Mission: <span class="text-danger">Connecting Lives</span></h1>
+                    <p class="lead mb-4" style="color:#444;">We bridge the gap between blood donors and recipients through innovative technology and compassionate service.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#story" class="btn btn-danger btn-lg">Our Story</a>
+                        <a href="#team" class="btn btn-danger btn-lg" >Meet Our Team</a>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             class="img-fluid rounded-4 shadow-lg" alt="About Hero">
+                        <div class="stats-overlay bg-dark bg-opacity-75 p-4 rounded-3 position-absolute bottom-0 start-0 m-4">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <h3 class="text-white fw-bold">0</h3>
+                                    <p class="text-light mb-0">Lives Saved</p>
+                                </div>
+                                <div class="col-4">
+                                    <h3 class="text-white fw-bold">1+</h3>
+                                    <p class="text-light mb-0">Cities</p>
+                                </div>
+                                <div class="col-4">
+                                    <h3 class="text-white fw-bold">24/7</h3>
+                                    <p class="text-light mb-0">Service</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <!-- Our Story -->
+<section id="story" class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <!-- Timeline -->
+            <div class="col-lg-6" data-aos="fade-right">
+                <div class="story-timeline">
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">2025</div>
+                        <div class="timeline-content">
+                            <h5>Idea & Research</h5>
+                            <p>
+                                Initial research conducted to identify challenges in Sri Lanka’s
+                                blood donation and emergency blood supply systems.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">2025</div>
+                        <div class="timeline-content">
+                            <h5>System Design</h5>
+                            <p>
+                                LifeFlow system architecture designed focusing on usability,
+                                security, and fast emergency response.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">2025 (Mid)</div>
+                        <div class="timeline-content">
+                            <h5>Prototype Development</h5>
+                            <p>
+                                Development of a functional prototype including donor registration,
+                                blood request handling, and hospital coordination.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">2026</div>
+                        <div class="timeline-content">
+                            <h5>Pilot Implementation (Planned)</h5>
+                            <p>
+                                Planned pilot testing with selected hospitals and blood donation centers
+                                to validate system performance.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">Future</div>
+                        <div class="timeline-content">
+                            <h5>LifeFlow Smart Platform</h5>
+                            <p>
+                                Future integration of AI-powered donor matching and real-time blood
+                                availability tracking.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Story Content -->
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="ps-lg-5">
+                    <span class="badge bg-danger bg-opacity-10 text-danger mb-3">
+                        Our Journey
+                    </span>
+
+                    <h2 class="display-5 fw-bold mb-4">
+                        Building a Smarter Blood Management System
+                    </h2>
+
+                    <p class="lead text-muted mb-4">
+                        LifeFlow is a newly developed digital platform created by Health ICT students
+                        to modernize blood donation and emergency blood management processes in Sri Lanka.
+                    </p>
+
+                    <p class="mb-4">
+                        The project focuses on improving donor coordination, reducing response times,
+                        and ensuring secure and accurate data handling through technology-driven solutions.
+                    </p>
+
+                    <div class="d-flex gap-4">
+                        <div class="text-center">
+                            <h3 class="text-danger fw-bold">99%</h3>
+                            <p class="text-muted">Reliability Target</p>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-danger fw-bold">&lt; 60 min</h3>
+                            <p class="text-muted">Target Response Time</p>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-danger fw-bold">User-Focused</h3>
+                            <p class="text-muted">System Design</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+    <!-- Values -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <span class="badge bg-danger bg-opacity-10 text-danger mb-3">Our Values</span>
+                <h2 class="display-5 fw-bold mb-3">Principles That Guide Us</h2>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4" data-aos="fade-up">
+                    <div class="value-card text-center p-4 rounded-4">
+                        <div class="value-icon mb-3">
+                            <i class="fas fa-heart fa-3x text-danger"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Compassion First</h4>
+                        <p class="text-muted">Every decision is made with empathy and understanding of human needs.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="value-card text-center p-4 rounded-4">
+                        <div class="value-icon mb-3">
+                            <i class="fas fa-shield-alt fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Trust & Security</h4>
+                        <p class="text-muted">Military-grade security for all sensitive medical and personal data.</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="value-card text-center p-4 rounded-4">
+                        <div class="value-icon mb-3">
+                            <i class="fas fa-bolt fa-3x text-warning"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Speed Saves</h4>
+                        <p class="text-muted">Optimized processes that prioritize rapid response in emergencies.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team -->
+<section id="team" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <span class="badge bg-danger bg-opacity-10 text-danger mb-3">Meet the Team</span>
+            <h2 class="display-5 fw-bold mb-3">The Minds Behind LifeFlow</h2>
+        </div>
+
+       <div class="row g-4 justify-content-center">
+
+    <!-- Team Member 1 -->
+    <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up">
+        <div class="team-card text-center">
+            <div class="team-img mb-2 mx-auto">
+                <div class="rounded-circle overflow-hidden mx-auto" 
+                     style="width: 80px; height: 80px;">
+                    <img src="osadi.jpeg" 
+                         alt="E.A.O. Romesha" 
+                         class="w-100 h-100 object-fit-cover">
+                </div>
+            </div>
+            <h6 class="fw-bold mb-0">E.A.O. Romesha</h6>
+            <p class="text-danger small mb-1">Group Leader</p>
+            <p class="text-muted very-small">GWU-HICT-2021-16</p>
+        </div>
+    </div>
+
+    <!-- Team Member 2 -->
+    <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="team-card text-center">
+            <div class="team-img mb-2 mx-auto">
+                <div class="rounded-circle overflow-hidden mx-auto" 
+                     style="width: 80px; height: 80px;">
+                    <img src="anuki.jpeg" 
+                         alt="A.S. Ranasinghe" 
+                         class="w-100 h-100 object-fit-cover">
+                </div>
+            </div>
+            <h6 class="fw-bold mb-0">A.S. Ranasinghe</h6>
+            <p class="text-danger small mb-1">System Architect</p>
+            <p class="text-muted very-small">GWU-HICT-2021-14</p>
+        </div>
+    </div>
+
+    <!-- Team Member 3 -->
+    <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="team-card text-center">
+            <div class="team-img mb-2 mx-auto">
+                <div class="rounded-circle overflow-hidden mx-auto" 
+                     style="width: 80px; height: 80px;">
+                    <img src="madhu.jpeg" 
+                         alt="R. Madhushalini" 
+                         class="w-100 h-100 object-fit-cover">
+                </div>
+            </div>
+            <h6 class="fw-bold mb-0">R. Madhushalini</h6>
+            <p class="text-danger small mb-1">UX Designer</p>
+            <p class="text-muted very-small">GWU-HICT-2021-34</p>
+        </div>
+    </div>
+
+    <!-- Team Member 4 -->
+    <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="300">
+        <div class="team-card text-center">
+            <div class="team-img mb-2 mx-auto">
+                <div class="rounded-circle overflow-hidden mx-auto" 
+                     style="width: 80px; height: 80px;">
+                    <img src="sasika1.jpeg" 
+                         alt="J. Sasika" 
+                         class="w-100 h-100 object-fit-cover">
+                </div>
+            </div>
+            <h6 class="fw-bold mb-0">J. Sasika</h6>
+            <p class="text-danger small mb-1">Backend Developer</p>
+            <p class="text-muted very-small">GWU-HICT-2021-44</p>
+        </div>
+    </div>
+
+    <!-- Team Member 5 -->
+    <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="400">
+        <div class="team-card text-center">
+            <div class="team-img mb-2 mx-auto">
+                <div class="rounded-circle overflow-hidden mx-auto" 
+                     style="width: 80px; height: 80px;">
+                    <img src="sachini.png" 
+                         alt="A.H.S. Madhushika" 
+                         class="w-100 h-100 object-fit-cover">
+                </div>
+            </div>
+            <h6 class="fw-bold mb-0">A.H.S. Madhushika</h6>
+            <p class="text-danger small mb-1">Final Validation</p>
+            <p class="text-muted very-small">GWU-HICT-2021-49</p>
+        </div>
+    </div>
+
+</div>
+        </div>
+    </div>
+</section>
+
+
+   <footer class="bg-dark text-white pt-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="mb-4 d-flex align-items-center gap-3">
+                    <!-- Your Blood Logo from folder - Increased Size -->
+                    <img src="blood logo.png" alt="LifeFlow Blood Logo" height="120" width="120" style="object-fit: contain;" class="mb-3">
+                    <div>
+                        <h2 class="fw-bold mb-0" style="font-size: 2.5rem;">Life<span class="text-danger">Flow</span></h2>
+                        <p class="text-light mt-2 mb-0" style="font-size: 1rem;">Saving Lives Together</p>
+                    </div>
+                </div>
+                <p class="text-light mt-3">Sri Lanka's premier blood bank management system connecting donors with those in need.</p>
+                
+                <div class="social-links d-flex gap-3 mt-4">
+                    <a href="https://www.facebook.com/lifeflow.lk" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Facebook" title="Follow us on Facebook" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://twitter.com/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Twitter" title="Follow us on Twitter" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Instagram" title="Follow us on Instagram" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on LinkedIn" title="Follow us on LinkedIn" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on YouTube" title="Follow us on YouTube" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-4">
+                <h5 class="fw-bold mb-4">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="index.html" class="text-light text-decoration-none hover-effect">Home</a></li>
+                    <li class="mb-2"><a href="pages/about.html" class="text-light text-decoration-none hover-effect">About Us</a></li>
+                    <li class="mb-2"><a href="pages/services.html" class="text-light text-decoration-none hover-effect">Services</a></li>
+                    <li class="mb-2"><a href="pages/donors.html" class="text-light text-decoration-none hover-effect">Find Donors</a></li>
+                    <li class="mb-2"><a href="pages/campaigns.html" class="text-light text-decoration-none hover-effect">Campaigns</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <h5 class="fw-bold mb-4">Important Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="pages/emergency.html" class="text-light text-decoration-none hover-effect">Emergency Request</a></li>
+                    <li class="mb-2"><a href="blog.html" class="text-light text-decoration-none hover-effect">Health Achievements</a></li>
+                    <li class="mb-2"><a href="contact.html" class="text-light text-decoration-none hover-effect">Contact Us</a></li>
+                    <li class="mb-2"><a href="terms.html" class="text-light text-decoration-none hover-effect">Terms & Conditions</a></li>
+                    <li class="mb-2"><a href="privacy.html" class="text-light text-decoration-none hover-effect">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <h5 class="fw-bold mb-4">Contact Info</h5>
+                <ul class="list-unstyled text-light">
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-map-marker-alt text-danger me-3 mt-1"></i>
+                        <span>Faculty of Indigenous Health Sciences and Technology,<br>
+                        Gampaha Wickramarachchi University of Indigenous Medicine,<br>
+                        Sri Lanka</span>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-phone-alt text-danger me-3"></i>
+                        <span>Emergency: 1990<br>
+                        General: +94 11 234 5678</span>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-envelope text-danger me-3"></i>
+                        <span>help@lifeflow.lk</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="bg-light my-5" style="opacity: 0.2;">
+
+        <div class="row">
+            <div class="col-12 text-center">
+                <p class="mb-0">&copy; 2025 LifeFlow Blood Management System. All rights reserved. <span class="text-danger">🩸</span> Saving lives together.</p>
+        </div>
+    </div>
+</footer>
+
+<style>
+/* Add this to your existing CSS for hover effects */
+.hover-effect {
+    transition: all 0.3s ease;
+    position: relative;
+    padding-left: 0;
+}
+
+.hover-effect:hover {
+    color: #ff4d4d !important;
+    padding-left: 5px;
+}
+
+.social-link {
+    transition: all 0.3s ease;
+    border-width: 2px;
+}
+
+.social-link:hover {
+    background-color: #ff4d4d !important;
+    border-color: #ff4d4d !important;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
+}
+
+/* Optional: Add a subtle animation to your logo */
+img[alt="LifeFlow Blood Logo"] {
+    animation: gentlePulse 3s ease-in-out infinite;
+    filter: drop-shadow(0 4px 8px rgba(255, 0, 0, 0.3));
+    border-radius: 50%; /* If your logo is circular, remove if not needed */
+}
+
+@keyframes gentlePulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    img[alt="LifeFlow Blood Logo"] {
+        height: 100px;
+        width: 100px;
+    }
+}
+</style>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+</html>

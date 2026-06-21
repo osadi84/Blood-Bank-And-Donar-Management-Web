@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeFlow - Blood Bank & Donor Management System</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+</head>
+<body>
+    <!-- ================= CHATBOT WIDGET START ================= -->
+<div id="chatbot-toggle" onclick="chatbotShow()">
+    💬
+</div>
+
+<div id="chatbot-box">
+    <div id="chatbot-header">LifeFlow AI Assistant</div>
+    <div id="chatbot-body"></div>
+    <div class="chatbot-input-area">
+        <input type="text" id="chatbot-input" placeholder="Ask anything... (Try: Find O+ near me)">
+        <button onclick="chatSend()">➤</button>
+    </div>
+</div>
+
+<style>
+#chatbot-toggle{
+    position:fixed;
+    bottom:110px;   /* ⬆ Increased from 20px → Now moved clearly up */
+    right:25px;
+    background:#e63946;
+    color:#fff;
+    padding:15px 19px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:23px;
+    box-shadow:0 0 15px rgba(0,0,0,.3);
+    z-index:999999;
+    font-weight:bold;
+}
+
+#chatbot-box{
+    width:350px;
+    height:450px;
+    background:#fff;
+    border-radius:10px;
+    position:fixed;
+    bottom:190px;      /* ⬆ increased to avoid overlapping */
+    right:25px;
+    display:none;
+    flex-direction:column;
+    box-shadow:0 0 25px rgba(0,0,0,.25);
+    overflow:hidden;
+    z-index:999999;
+}
+
+#chatbot-header{
+    background:#d62828;padding:12px;text-align:center;color:white;
+    font-weight:600;font-size:18px;
+}
+#chatbot-body{
+    flex:1;padding:12px;overflow-y:auto;font-size:14px;
+}
+.chat-user{ text-align:right;margin-bottom:8px;color:#444; }
+.chat-bot{ text-align:left;margin-bottom:8px;color:#d62828;font-weight:500; }
+.chatbot-input-area{
+    display:flex;border-top:1px solid #ddd;
+}
+#chatbot-input{
+    flex:1;border:none;padding:10px;font-size:14px;outline:none;
+}
+.chatbot-input-area button{
+    background:#d62828;color:white;border:none;padding:10px 14px;cursor:pointer;
+}
+</style>
+
+<script>
+// Ensure event listeners attach after DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+    const inp = document.getElementById('chatbot-input');
+    if(inp){
+        inp.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ e.preventDefault(); chatSend(); } });
+    }
+});
+
+function chatbotShow(){
+    const box = document.getElementById("chatbot-box");
+    const isOpen = (box.style.display === "flex");
+    box.style.display = isOpen ? "none" : "flex";
+    if(!isOpen){ setTimeout(()=>{ const inp=document.getElementById('chatbot-input'); if(inp) inp.focus(); }, 120); }
+}
+
+function chatbotAdd(msg, from='bot'){
+    let div=document.createElement("div");
+    div.className=from==='user'?'chat-user':'chat-bot';
+    div.textContent=msg;
+    document.getElementById("chatbot-body").appendChild(div);
+    document.getElementById("chatbot-body").scrollTop = document.getElementById("chatbot-body").scrollHeight;
+}
+
+// Small local agent for common queries and fallback when AI backend is missing
+function agentRespond(msg){
+    const m = msg.toLowerCase();
+    if(/\b(hi|hello|hey)\b/.test(m)) return "Hello! I'm LifeFlow Assistant. I can help find nearby donors, send alerts, or share contact info. Try: 'Find O+ near me'.";
+    if(/\b(help|what can you do|commands)\b/.test(m)) return "You can: 'Find [blood group] near me', 'Contact', 'Register donor', 'Send alert to donors'.";
+    if(/\b(contact|phone|call|email)\b/.test(m)) return "Contact: 011-xxxxxxx • Email: contact@lifeflow.lk";
+    if(/\b(register|sign up|become donor)\b/.test(m)) return "To register as a donor, visit the Register page: /register.html";
+    if(/\b(hours|open|opening)\b/.test(m)) return "Office hours: Mon-Fri 9:00 - 17:00";
+    if(/\b(location|where are you|address)\b/.test(m)) return "We're based in Colombo, Sri Lanka. Visit our Contact page for details.";
+    if(/\b(donate|donation)\b/.test(m)) return "To donate, please register as a donor on our Register page or view donation drives on the Campaigns page.";
+    if(/\b(thank|thanks)\b/.test(m)) return "You're welcome! Happy to help.";
+    if(/\b(send alert|alert|notify)\b/.test(m)){
+        if(window._last_found_donors && window._last_found_donors.length){
+            chatbotAdd("Do you want me to send alerts to the last found donors? Reply 'yes' to confirm.");
+            // set a short-lived marker so 'yes' can trigger send
+            window._awaiting_alert_confirmation = true;
+            return null;
+        }
+        return "No donors found yet. Try 'Find O+ near me' first.";
+    }
+    return null;
+}
+
+async function sendAlertsToFoundDonors(){
+    if(!window._last_found_donors || !window._last_found_donors.length){ chatbotAdd('No donors to alert.'); return; }
+    chatbotAdd('Sending alerts to donors...');
+    try{
+        const controller = new AbortController();
+        const timeout = setTimeout(()=>controller.abort(), 9000);
+        const res = await fetch('api/send_alert.php',{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ donor_ids: window._last_found_donors.map(d=>d.id), message: window._last_alert_message || 'URGENT: Need blood' }),
+            signal: controller.signal
+        });
+        clearTimeout(timeout);
+        if(!res.ok) throw new Error('Server error');
+        const j = await res.json();
+        chatbotAdd('Alerts sent. Server response: ' + (j.message || JSON.stringify(j)));
+        window._last_found_donors = null;
+        window._awaiting_alert_confirmation = false;
+    }catch(e){
+        console.error('send alerts failed', e);
+        chatbotAdd('Unable to send alerts — backend not available. You can call donors manually or configure api/send_alert.php.');
+    }
+}
+
+async function chatSend(){
+    const input = document.getElementById('chatbot-input');
+    if(!input) return;
+    const msg = input.value.trim();
+    if(!msg) return;
+    chatbotAdd(msg, 'user');
+    input.value = '';
+
+    // If awaiting confirmation to send alerts
+    if(/^\s*yes\s*$/i.test(msg) && window._awaiting_alert_confirmation){
+        await sendAlertsToFoundDonors();
+        return;
+    }
+
+    // Local agent reply first
+    const a = agentRespond(msg);
+    if(a){ chatbotAdd(a); return; }
+
+    // Auto find donors
+    if(/find|nearest|near me/i.test(msg)){
+        chatbotAdd('Locating donors near you... 📍');
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(async pos => {
+                const lat = pos.coords.latitude, lng = pos.coords.longitude;
+                const b = msg.match(/(A|B|AB|O)[+-]?/i);
+                if(!b){ chatbotAdd('Which blood type? (ex: O+, A-)'); return; }
+                try{
+                    const controller = new AbortController();
+                    const to = setTimeout(()=>controller.abort(), 9000);
+                    const req = await fetch('api/find_donors.php',{
+                        method:'POST', headers:{'Content-Type':'application/json'},
+                        body:JSON.stringify({ blood_group: b[0], lat, lng, radius_km:20 }), signal: controller.signal
+                    });
+                    clearTimeout(to);
+                    if(!req.ok) throw new Error('Server error');
+                    const data = await req.json();
+                    if(!data || data.count === 0) chatbotAdd('No donors nearby ❗');
+                    else{
+                        chatbotAdd(`Found ${data.count} donors 🔥`);
+                        data.donors.slice(0,5).forEach(d => chatbotAdd(`${d.name} • ${d.blood_group}\n📞 ${d.phone}\n📍 ${d.maps_url}`));
+                        window._last_found_donors = data.donors.slice(0,5);
+                    }
+                }catch(e){ console.error('find donors', e); chatbotAdd('Unable to search donors right now.'); }
+            }, err => { chatbotAdd('Unable to get location: ' + err.message); });
+        } else {
+            chatbotAdd('Enable GPS or send lat,lng manually.');
+        }
+        return;
+    }
+
+    // Forward to AI backend with timeout and fallback
+    chatbotAdd('Thinking... 🤖');
+    try{
+        const controller = new AbortController();
+        const timer = setTimeout(()=>controller.abort(), 9000);
+        const res = await fetch('api/chatbot_proxy.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ message: msg }), signal: controller.signal });
+        clearTimeout(timer);
+        if(!res.ok) throw new Error('AI backend error');
+        const data = await res.json();
+        let text = data?.candidates?.[0]?.content?.parts?.[0]?.text || data?.output?.[0]?.content || data?.text || null;
+        if(!text){ chatbotAdd("I couldn't get a full answer from the AI backend. Try 'Help' or use the Find donors command."); }
+        else { chatbotAdd(typeof text === 'object' ? JSON.stringify(text) : text); }
+    }catch(err){
+        console.error('AI request failed', err);
+        // Best-effort fallback: try produce a short helpful answer from keywords
+        let fallback = null;
+        if(/\b(what is lifeflow|who are you|what is this)\b/i.test(msg)) fallback = 'LifeFlow connects blood donors with hospitals and those in need. We help locate nearby donors and coordinate alerts.';
+        if(/\b(how do i donate|how to donate)\b/i.test(msg)) fallback = 'You can register on the Register page. We will notify you about donation drives in your area.';
+        if(/\b(open|hours)\b/i.test(msg)) fallback = 'Office hours Mon-Fri 9:00-17:00.';
+        if(!fallback) fallback = "I'm having trouble reaching the AI backend; try 'Help' or 'Find O+ near me'.";
+        chatbotAdd(fallback);
+    }
+}
+</script>
+<!-- ================= CHATBOT WIDGET END ================= -->
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="heartbeat-loader">
+            <div class="heart"></div>
+            <div class="pulse"></div>
+            <div class="text">Loading LifeFlow</div>
+        </div>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="top-bar bg-dark text-white py-2">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <span><i class="fas fa-phone-alt me-2"></i>Emergency: 1990</span>
+                        <span><i class="fas fa-envelope me-2"></i>help@lifeflow.lk</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="d-inline-flex align-items-center gap-3">
+                        <div class="theme-switch">
+                            <button class="btn btn-sm btn-outline-light" id="themeToggle">
+                                <i class="fas fa-moon"></i>
+                            </button>
+                        </div>
+                        <a href="login.html" class="text-white text-decoration-none">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a href="register.html" class="btn btn-danger btn-sm">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand" href="index.html">
+                <img src="https://img.freepik.com/premium-vector/blood-donation-logo-design-vector_369465-218.jpg" alt="LifeFlow Logo" height="40">
+                <span class="brand-name">Life<span class="text-danger">Flow</span></span>
+            </a>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="d-none d-lg-flex mx-auto" style="width: 400px;">
+                <div class="input-group search-box">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0" 
+                           id="globalSearch" 
+                           placeholder="Search for services, donors, hospitals..."
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                    <button class="btn btn-danger" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
+                    <!-- Search Results Dropdown -->
+                    <ul class="dropdown-menu w-100" id="searchResults">
+                        <li><h6 class="dropdown-header">Quick Actions</h6></li>
+                        <li><a class="dropdown-item" href="pages/donors.html"><i class="fas fa-users me-2"></i>Find Donors</a></li>
+                        <li><a class="dropdown-item" href="pages/emergency.html"><i class="fas fa-ambulance me-2"></i>Emergency Request</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><h6 class="dropdown-header">Services</h6></li>
+                        <li><a class="dropdown-item" href="pages/services.html#blood-test"><i class="fas fa-vial me-2"></i>Blood Testing</a></li>
+                        <li><a class="dropdown-item" href="pages/services.html#donation"><i class="fas fa-hand-holding-heart me-2"></i>Donation Camp</a></li>
+                        <li><a class="dropdown-item" href="pages/services.html#storage"><i class="fas fa-boxes me-2"></i>Blood Storage</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Nav Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nav Items -->
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="find-donor.html">Find Donors</a></li>
+                    <li class="nav-item"><a class="nav-link" href="live-tracking.html">Live Tracking</a></li>
+                    <li class="nav-item"><a class="nav-link" href="campaigns.html">Campaigns</a></li>
+                    <li class="nav-item"><a class="nav-link" href="blog.html">Achievements</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    
+                    
+                    <!-- Mobile Search -->
+                    <li class="nav-item d-lg-none mt-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <button class="btn btn-danger" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section position-relative overflow-hidden">
+        <div class="hero-bg"></div>
+        <div class="container position-relative z-1">
+            <div class="row align-items-center min-vh-80 py-5">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h1 class="display-2 fw-bold text-white mb-4">
+                        Every Drop <span class="text-warning">Counts</span>,<br>
+                        Every Second <span class="text-warning">Matters</span>
+                    </h1>
+                    <p class="lead text-light mb-4">
+                        Join thousands of life-savers in Sri Lanka's most advanced blood bank management system. 
+                        Real-time tracking, instant alerts, and seamless coordination.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="Emergency request.html" class="btn btn-danger btn-lg shadow-lg px-4 py-3">
+                            <i class="fas fa-ambulance me-2"></i>Emergency Request
+                        </a>
+                        <a id="becomeDonorBtn" href="register.html" class="btn btn-outline-light btn-lg px-4 py-3 main-cta" role="button" tabindex="0" aria-label="Become a Donor" onclick="window.location.href='register.html'">
+                            <i class="fas fa-heart me-2"></i>Become a Donor
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="hero-stats p-4 rounded-4 bg-white bg-opacity-10 backdrop-blur shadow-lg">
+                        <h3 class="text-white mb-4">Live Statistics</h3>
+                        <div class="row g-4">
+                            <div class="col-6">
+                                <div class="stat-card text-center p-3 rounded-3">
+                                    <div class="stat-icon mb-2">
+                                        <i class="fas fa-users fa-2x text-danger"></i>
+                                    </div>
+                                    <h3 class="text-white fw-bold" id="liveDonors">15,842</h3>
+                                    <p class="text-light mb-0">Active Donors</p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="stat-card text-center p-3 rounded-3">
+                                    <div class="stat-icon mb-2">
+                                        <i class="fas fa-tint fa-2x text-danger"></i>
+                                    </div>
+                                    <h3 class="text-white fw-bold" id="liveUnits">2,458</h3>
+                                    <p class="text-light mb-0">Units Available</p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="stat-card text-center p-3 rounded-3">
+                                    <div class="stat-icon mb-2">
+                                        <i class="fas fa-hospital fa-2x text-danger"></i>
+                                    </div>
+                                    <h3 class="text-white fw-bold" id="liveHospitals">127</h3>
+                                    <p class="text-light mb-0">Partner Hospitals</p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="stat-card text-center p-3 rounded-3">
+                                    <div class="stat-icon mb-2">
+                                        <i class="fas fa-hand-holding-heart fa-2x text-danger"></i>
+                                    </div>
+                                    <h3 class="text-white fw-bold" id="liveSaved">48,562</h3>
+                                    <p class="text-light mb-0">Lives Saved</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Animated Blood Cells -->
+        <div class="blood-cells">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+        </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3" data-aos="fade-up">
+                    <a href="find-donor.html" class="quick-action-card text-decoration-none">
+                        <div class="card border-0 shadow-lg h-100 hover-lift">
+                            <div class="card-body text-center p-4">
+                                <div class="icon-wrapper bg-danger bg-opacity-10 rounded-circle mb-3">
+                                    <i class="fas fa-search fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2">Find Donors</h5>
+                                <p class="text-muted mb-0">Search compatible donors by location & blood type</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+                    <a href="services.html" class="quick-action-card text-decoration-none">
+                        <div class="card border-0 shadow-lg h-100 hover-lift">
+                            <div class="card-body text-center p-4">
+                                <div class="icon-wrapper bg-primary bg-opacity-10 rounded-circle mb-3">
+                                    <i class="fas fa-hand-holding-medical fa-2x text-primary"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2">Book Services</h5>
+                                <p class="text-muted mb-0">Schedule blood tests or donation appointments</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+                    <a href="campaigns.html" class="quick-action-card text-decoration-none">
+                        <div class="card border-0 shadow-lg h-100 hover-lift">
+                            <div class="card-body text-center p-4">
+                                <div class="icon-wrapper bg-success bg-opacity-10 rounded-circle mb-3">
+                                    <i class="fas fa-calendar-alt fa-2x text-success"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2">Join Campaigns</h5>
+                                <p class="text-muted mb-0">Participate in blood donation drives</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+                    <a href="blood-inventory.html" class="quick-action-card text-decoration-none">
+                        <div class="card border-0 shadow-lg h-100 hover-lift">
+                            <div class="card-body text-center p-4">
+                                <div class="icon-wrapper bg-warning bg-opacity-10 rounded-circle mb-3">
+                                    <i class="fas fa-map-marked-alt fa-2x text-warning"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2">Find Hospitals</h5>
+                                <p class="text-muted mb-0">Locate nearest blood banks & hospitals</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blood Urgency Alert -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="alert urgency-alert rounded-4 shadow-sm border-0" role="alert">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon me-3">
+                                <i class="fas fa-exclamation-triangle fa-2x text-danger"></i>
+                            </div>
+                        <div>
+                            <h4 class="alert-heading mb-1">Urgent Blood Requirement!</h4>
+                            <p class="mb-0">Type <span class="badge bg-danger">O-</span> critically low. 
+                                <span id="urgentCountdown" class="text-danger fw-bold"></span> units needed immediately.</p>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <a href="Emergency request.html" class="btn btn-danger btn-lg">
+                            <i class="fas fa-heartbeat me-2"></i>Respond Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Preview -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <span class="badge bg-danger bg-opacity-10 text-danger mb-3">Our Services</span>
+                <h2 class="display-5 fw-bold mb-3">Comprehensive Blood Management</h2>
+                <p class="lead text-muted">End-to-end solutions for donors, hospitals, and patients</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4" data-aos="fade-up">
+                    <div class="service-card card border-0 shadow-lg h-100">
+                        <div class="card-img-top service-img" style="background-image: url('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Donor Management</h4>
+                            <p class="text-muted mb-3">Complete donor lifecycle management with health tracking, donation history, and automated reminders.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Smart donor matching</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Health status tracking</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Automated notifications</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="service-card card border-0 shadow-lg h-100">
+                        <div class="card-img-top service-img" style="background-image: url('https://images.unsplash.com/photo-1582719508461-905c673771fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Inventory Management</h4>
+                            <p class="text-muted mb-3">Real-time blood stock monitoring with expiry alerts and intelligent distribution planning.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Real-time stock levels</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Expiry tracking system</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Automated reordering</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="service-card card border-0 shadow-lg h-100">
+                        <div class="card-img-top service-img" style="background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                        <div class="card-body p-4">
+                            <div class="service-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Emergency Response</h4>
+                            <p class="text-muted mb-3">Instant emergency alerts with GPS donor location and automated communication system.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Real-time donor location</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Multi-channel alerts</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Response tracking</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section py-5 bg-gradient-danger text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h2 class="display-5 fw-bold mb-3">Ready to Save Lives?</h2>
+                    <p class="lead mb-4">Join our network of heroes. Register as a donor or partner with us today.</p>
+                </div>
+                <div class="col-lg-4 text-end">
+                    <div class="d-flex flex-column flex-lg-row gap-3">
+                        <a id="becomeDonorBtn" href="register.html" class="btn btn-light btn-lg px-4 main-cta" role="button" tabindex="0" aria-label="Become Donor" onclick="window.location.href='register.html'; return false;">
+                            <i class="fas fa-user-plus me-2"></i>Become Donor
+                        </a>
+                        <a id="hospitalPartnerBtn" href="hospitalpartner.html" class="btn btn-outline-light btn-lg px-4" role="button" tabindex="0" aria-label="Hospital Partner" onclick="window.location.href='hospitalpartner.html'; return false;">
+                            <i class="fas fa-hospital me-2"></i>Hospital Partner
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white pt-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="mb-4 d-flex align-items-center gap-3">
+                    <!-- Your Blood Logo from folder - Increased Size -->
+                    <img src="blood logo.png" alt="LifeFlow Blood Logo" height="120" width="120" style="object-fit: contain;" class="mb-3">
+                    <div>
+                        <h2 class="fw-bold mb-0" style="font-size: 2.5rem;">Life<span class="text-danger">Flow</span></h2>
+                        <p class="text-light mt-2 mb-0" style="font-size: 1rem;">Saving Lives Together</p>
+                    </div>
+                </div>
+                <p class="text-light mt-3">Sri Lanka's premier blood bank management system connecting donors with those in need.</p>
+                
+                <div class="social-links d-flex gap-3 mt-4">
+                    <a href="https://www.facebook.com/lifeflow.lk" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Facebook" title="Follow us on Facebook" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://twitter.com/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Twitter" title="Follow us on Twitter" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Instagram" title="Follow us on Instagram" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on LinkedIn" title="Follow us on LinkedIn" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on YouTube" title="Follow us on YouTube" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-4">
+                <h5 class="fw-bold mb-4">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="index.html" class="text-light text-decoration-none hover-effect">Home</a></li>
+                    <li class="mb-2"><a href="pages/about.html" class="text-light text-decoration-none hover-effect">About Us</a></li>
+                    <li class="mb-2"><a href="pages/services.html" class="text-light text-decoration-none hover-effect">Services</a></li>
+                    <li class="mb-2"><a href="pages/donors.html" class="text-light text-decoration-none hover-effect">Find Donors</a></li>
+                    <li class="mb-2"><a href="pages/campaigns.html" class="text-light text-decoration-none hover-effect">Campaigns</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <h5 class="fw-bold mb-4">Important Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="pages/emergency.html" class="text-light text-decoration-none hover-effect">Emergency Request</a></li>
+                    <li class="mb-2"><a href="blog.html" class="text-light text-decoration-none hover-effect">Health Achievements</a></li>
+                    <li class="mb-2"><a href="contact.html" class="text-light text-decoration-none hover-effect">Contact Us</a></li>
+                    <li class="mb-2"><a href="terms.html" class="text-light text-decoration-none hover-effect">Terms & Conditions</a></li>
+                    <li class="mb-2"><a href="privacy.html" class="text-light text-decoration-none hover-effect">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <h5 class="fw-bold mb-4">Contact Info</h5>
+                <ul class="list-unstyled text-light">
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-map-marker-alt text-danger me-3 mt-1"></i>
+                        <span>Faculty of Indigenous Health Sciences and Technology,<br>
+                        Gampaha Wickramarachchi University of Indigenous Medicine,<br>
+                        Sri Lanka</span>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-phone-alt text-danger me-3"></i>
+                        <span>Emergency: 1990<br>
+                        General: +94 11 234 5678</span>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-envelope text-danger me-3"></i>
+                        <span>help@lifeflow.lk</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="bg-light my-5" style="opacity: 0.2;">
+
+        <div class="row">
+            <div class="col-12 text-center">
+               <p class="mb-0">&copy; 2025 LifeFlow Blood Management System. All rights reserved. <span class="text-danger">🩸</span> Saving lives together.</p>
+        </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+/* Add this to your existing CSS for hover effects */
+.hover-effect {
+    transition: all 0.3s ease;
+    position: relative;
+    padding-left: 0;
+}
+
+.hover-effect:hover {
+    color: #ff4d4d !important;
+    padding-left: 5px;
+}
+
+.social-link {
+    transition: all 0.3s ease;
+    border-width: 2px;
+}
+
+.social-link:hover {
+    background-color: #ff4d4d !important;
+    border-color: #ff4d4d !important;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
+}
+
+/* Optional: Add a subtle animation to your logo */
+img[alt="LifeFlow Blood Logo"] {
+    animation: gentlePulse 3s ease-in-out infinite;
+    filter: drop-shadow(0 4px 8px rgba(255, 0, 0, 0.3));
+    border-radius: 50%; /* If your logo is circular, remove if not needed */
+}
+
+@keyframes gentlePulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    img[alt="LifeFlow Blood Logo"] {
+        height: 100px;
+        width: 100px;
+    }
+}
+</style>
+
+<style>
+/* Add this to your existing CSS for hover effects */
+.hover-effect {
+    transition: all 0.3s ease;
+    position: relative;
+    padding-left: 0;
+}
+
+.hover-effect:hover {
+    color: #ff4d4d !important;
+    padding-left: 5px;
+}
+
+.social-link {
+    transition: all 0.3s ease;
+    border-width: 2px;
+}
+
+.social-link:hover {
+    background-color: #ff4d4d !important;
+    border-color: #ff4d4d !important;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
+}
+
+.blood-logo-wrapper {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .blood-logo-wrapper {
+        width: 100px;
+        height: 100px;
+    }
+}
+</style>
+    <!-- Floating Action Button -->
+    <div class="fab-container">
+        <button class="fab-btn btn btn-danger rounded-circle shadow-lg" data-bs-toggle="dropdown">
+            <i class="fas fa-plus"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="pages/emergency.html"><i class="fas fa-ambulance me-2"></i>Emergency</a></li>
+            <li><a class="dropdown-item" href="pages/donors.html"><i class="fas fa-search me-2"></i>Find Donor</a></li>
+            <li><a class="dropdown-item" href="register.html"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+            <li><a class="dropdown-item" href="pages/campaigns.html"><i class="fas fa-calendar me-2"></i>Campaigns</a></li>
+        </ul>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="assets/js/animations.js"></script>
+    <script src="assets/js/search.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Live counter animation
+        function animateCounter(id, target, duration = 2000) {
+            const element = document.getElementById(id);
+            const start = parseInt(element.textContent.replace(/,/g, ''));
+            const increment = target > start ? 1 : -1;
+            const stepTime = Math.abs(Math.floor(duration / (target - start)));
+            
+            let current = start;
+            const timer = setInterval(() => {
+                current += increment;
+                element.textContent = current.toLocaleString();
+                if (current === target) clearInterval(timer);
+            }, stepTime);
+        }
+
+        // Initialize live counters
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                animateCounter('liveDonors', 15842);
+                animateCounter('liveUnits', 2458);
+                animateCounter('liveHospitals', 127);
+                animateCounter('liveSaved', 48562);
+            }, 1000);
+        });
+
+        // Pointer/touch fallback: force navigation when user interacts inside the Become Donor or Hospital Partner button areas
+        (function(){
+            const becomeBtn = document.getElementById('becomeDonorBtn');
+            const hospitalBtn = document.getElementById('hospitalPartnerBtn');
+
+            function getCoordsFromEvent(e){
+                if(e.type === 'touchstart' || e.type === 'touchend'){
+                    const t = (e.changedTouches && e.changedTouches[0]) || (e.touches && e.touches[0]);
+                    return t ? {x: t.clientX, y: t.clientY} : null;
+                }
+                return {x: e.clientX, y: e.clientY};
+            }
+
+            function handler(e){
+                const coords = getCoordsFromEvent(e);
+                if(!coords) return;
+
+                [becomeBtn, hospitalBtn].forEach(btn => {
+                    if(!btn) return;
+                    const rect = btn.getBoundingClientRect();
+                    if(coords.x >= rect.left && coords.x <= rect.right && coords.y >= rect.top && coords.y <= rect.bottom){
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Fallback: detected interaction inside', btn.id, 'area (', e.type, '), navigating to', btn.getAttribute('href'));
+                        window.location.href = btn.getAttribute('href') || (btn === becomeBtn ? 'register.html' : 'contact.html');
+                    }
+                });
+            }
+
+            document.addEventListener('pointerdown', handler, true);
+            document.addEventListener('touchstart', handler, true);
+
+            // Preloader fallback: ensure preloader doesn't permanently block interaction
+            const preloader = document.querySelector('.preloader');
+            function removePreloaderFallback(){
+                if(!preloader) return;
+                preloader.style.pointerEvents = 'none';
+                preloader.style.opacity = '0';
+                setTimeout(()=>{
+                    preloader.style.display = 'none';
+                    console.log('Preloader fallback removed');
+                }, 300);
+            }
+
+            // On load try to hide it, and after 2s remove it if still visible
+            window.addEventListener('load', ()=>{
+                if(preloader){
+                    preloader.style.opacity = '0';
+                    setTimeout(()=>preloader.style.display = 'none', 500);
+                }
+            });
+
+            setTimeout(()=>{
+                if(preloader && getComputedStyle(preloader).display !== 'none') removePreloaderFallback();
+            }, 2000);
+
+            // Keyboard activation: Enter / Space should activate CTA buttons
+            document.addEventListener('keydown', function(e){
+                if(e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
+                    const el = document.activeElement;
+                    if(el && el.classList && el.classList.contains('main-cta')){
+                        e.preventDefault();
+                        const href = el.getAttribute('href');
+                        if(href) window.location.href = href;
+                        else el.click();
+                    }
+                }
+            });
+
+        })();
+    </script>
+</body>
+</html>

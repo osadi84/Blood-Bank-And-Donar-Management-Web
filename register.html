@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeFlow - Blood Bank & Donor Management System</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+
+    <style>
+        .registration-stepper {
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+        
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            background: #e9ecef;
+            color: #6c757d;
+            margin: 0 auto;
+        }
+        
+        .step-circle.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .step-circle.completed {
+            background: #28a745;
+            color: white;
+        }
+        
+        .step-label {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #6c757d;
+            text-align: center;
+        }
+        
+        .step-label.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .step-connector {
+            flex: 1;
+            height: 2px;
+            background: #e9ecef;
+            margin: 20px 10px 0;
+        }
+        
+        .step-connector.active {
+            background: var(--primary);
+        }
+        
+        .registration-form-step {
+            display: none;
+        }
+        
+        .registration-form-step.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .password-strength {
+            height: 5px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .strength-weak { background: #dc3545; }
+        .strength-fair { background: #fd7e14; }
+        .strength-good { background: #ffc107; }
+        .strength-strong { background: #28a745; }
+        
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .donor-type-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .donor-type-card.selected {
+            border-color: var(--primary);
+            background-color: rgba(229, 57, 53, 0.05);
+        }
+        
+        .donor-type-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .blood-type-badge {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 0 auto 15px;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading-spinner.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+   <!-- Top Bar -->
+    <div class="top-bar bg-dark text-white py-2">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <span><i class="fas fa-phone-alt me-2"></i>Emergency: 1990</span>
+                        <span><i class="fas fa-envelope me-2"></i>help@lifeflow.lk</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="d-inline-flex align-items-center gap-3">
+                        <div class="theme-switch">
+                            <button class="btn btn-sm btn-outline-light" id="themeToggle">
+                                <i class="fas fa-moon"></i>
+                            </button>
+                        </div>
+                        <a href="login.html" class="text-white text-decoration-none">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a href="register.html" class="btn btn-danger btn-sm">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand" href="index.html">
+                <img src="https://img.freepik.com/premium-vector/blood-donation-logo-design-vector_369465-218.jpg" alt="LifeFlow Logo" height="40">
+                <span class="brand-name">Life<span class="text-danger">Flow</span></span>
+            </a>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="d-none d-lg-flex mx-auto" style="width: 400px;">
+                <div class="input-group search-box">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0" 
+                           id="globalSearch" 
+                           placeholder="Search for services, donors, hospitals..."
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                    <button class="btn btn-danger" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
+                    <!-- Search Results Dropdown -->
+                    <ul class="dropdown-menu w-100" id="searchResults">
+                        <li><h6 class="dropdown-header">Quick Actions</h6></li>
+                        <li><a class="dropdown-item" href="pages/donors.html"><i class="fas fa-users me-2"></i>Find Donors</a></li>
+                        <li><a class="dropdown-item" href="pages/emergency.html"><i class="fas fa-ambulance me-2"></i>Emergency Request</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><h6 class="dropdown-header">Services</h6></li>
+                        <li><a class="dropdown-item" href="pages/services.html#blood-test"><i class="fas fa-vial me-2"></i>Blood Testing</a></li>
+                        <li><a class="dropdown-item" href="pages/services.html#donation"><i class="fas fa-hand-holding-heart me-2"></i>Donation Camp</a></li>
+                        <li><a class="dropdown-item" href="pages/services.html#storage"><i class="fas fa-boxes me-2"></i>Blood Storage</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Nav Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nav Items -->
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="find-donor.html">Find Donors</a></li>
+                    <li class="nav-item"><a class="nav-link" href="campaigns.html">Campaigns</a></li>
+                    
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="fas fa-user me-1"></i>Donor Dashboard
+                        </a>
+                    </li>
+                    
+                    <!-- Mobile Search -->
+                    <li class="nav-item d-lg-none mt-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <button class="btn btn-danger" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Registration Header -->
+    <section class="py-5 bg-gradient-primary ">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-3">Join LifeFlow Family</h1>
+                    <p class="lead mb-0">Register as a donor and become a life-saving hero in your community</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Stepper -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="registration-stepper">
+                <div class="d-flex align-items-center justify-content-between">
+                    <!-- Step 1 -->
+                    <div class="text-center">
+                        <div class="step-circle active" id="step1Circle">1</div>
+                        <div class="step-label active" id="step1Label">Account Type</div>
+                    </div>
+                    <div class="step-connector" id="connector1"></div>
+                    
+                    <!-- Step 2 -->
+                    <div class="text-center">
+                        <div class="step-circle" id="step2Circle">2</div>
+                        <div class="step-label" id="step2Label">Personal Info</div>
+                    </div>
+                    <div class="step-connector" id="connector2"></div>
+                    
+                    <!-- Step 3 -->
+                    <div class="text-center">
+                        <div class="step-circle" id="step3Circle">3</div>
+                        <div class="step-label" id="step3Label">Health Info</div>
+                    </div>
+                    <div class="step-connector" id="connector3"></div>
+                    
+                    <!-- Step 4 -->
+                    <div class="text-center">
+                        <div class="step-circle" id="step4Circle">4</div>
+                        <div class="step-label" id="step4Label">Review & Submit</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner-border text-danger" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Saving your information...</p>
+    </div>
+
+    <!-- Registration Form -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <!-- Step 1: Account Type -->
+                    <div class="registration-form-step active" id="step1">
+                        <div class="card border-0 shadow-lg">
+                            <div class="card-header bg-white py-4">
+                                <h3 class="fw-bold mb-0">Choose Your Account Type</h3>
+                                <p class="text-muted mb-0">Select how you want to contribute to saving lives</p>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="row g-4">
+                                    <!-- Regular Donor -->
+                                    <div class="col-md-6">
+                                        <div class="donor-type-card card border h-100" data-type="donor">
+                                            <div class="card-body text-center p-4">
+                                                <div class="blood-type-badge bg-danger text-white">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                                <h5 class="fw-bold mb-2">Regular Donor</h5>
+                                                <p class="text-muted small mb-3">
+                                                    Register as an individual donor to donate blood and save lives.
+                                                </p>
+                                                <ul class="list-unstyled text-start small">
+                                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Donate blood regularly</li>
+                                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Receive emergency alerts</li>
+                                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Track donation history</li>
+                                                    <li><i class="fas fa-check text-success me-2"></i>Earn donor rewards</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Hospital Staff -->
+                                    <div class="col-md-6">
+                                        <div class="donor-type-card card border h-100" data-type="hospital">
+                                            <div class="card-body text-center p-4">
+                                                <div class="blood-type-badge bg-primary text-white">
+                                                    <i class="fas fa-hospital"></i>
+                                                </div>
+                                                <h5 class="fw-bold mb-2">Hospital Staff</h5>
+                                                <p class="text-muted small mb-3">
+                                                    Register as hospital staff to request blood and manage inventory.
+                                                </p>
+                                                <ul class="list-unstyled text-start small">
+                                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Request blood units</li>
+                                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Manage hospital inventory</li>
+                                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Access donor database</li>
+                                                    <li><i class="fas fa-check text-success me-2"></i>Emergency coordination</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4 text-center">
+                                    <button class="btn btn-danger btn-lg px-5" onclick="nextStep(2)">
+                                        Next <i class="fas fa-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Personal Information -->
+                    <div class="registration-form-step" id="step2">
+                        <div class="card border-0 shadow-lg">
+                            <div class="card-header bg-white py-4">
+                                <h3 class="fw-bold mb-0" id="step2Title">Personal Information</h3>
+                                <p class="text-muted mb-0" id="step2Subtitle">Tell us about yourself</p>
+                            </div>
+                            <div class="card-body p-4">
+                                <form id="personalInfoForm">
+                                    <!-- Donor Fields -->
+                                    <div id="donorFields">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">First Name *</label>
+                                                <input type="text" class="form-control" id="firstName" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Last Name *</label>
+                                                <input type="text" class="form-control" id="lastName" required>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <label class="form-label">NIC Number *</label>
+                                                <input type="text" class="form-control" id="nic" required 
+                                                       pattern="^[0-9]{9}[vVxX]?$|^[0-9]{12}$"
+                                                       title="Enter valid Sri Lankan NIC">
+                                                <small class="text-muted">Format: 123456789V or 123456789012</small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Date of Birth *</label>
+                                                <input type="date" class="form-control" id="dob" required>
+                                                <small class="text-muted">Must be at least 18 years old</small>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <label class="form-label">Gender *</label>
+                                                <select class="form-select" id="gender" required>
+                                                    <option value="">Select Gender</option>
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Blood Type *</label>
+                                                <select class="form-select" id="bloodType" required>
+                                                    <option value="">Select Blood Type</option>
+                                                    <option value="A+">A+</option>
+                                                    <option value="A-">A-</option>
+                                                    <option value="B+">B+</option>
+                                                    <option value="B-">B-</option>
+                                                    <option value="AB+">AB+</option>
+                                                    <option value="AB-">AB-</option>
+                                                    <option value="O+">O+</option>
+                                                    <option value="O-">O-</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <label class="form-label">Email Address *</label>
+                                                <input type="email" class="form-control" id="email" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Phone Number *</label>
+                                                <input type="tel" class="form-control" id="phone" required 
+                                                       pattern="[0-9]{10}" title="10 digit phone number">
+                                                <small class="text-muted">Format: 0771234567</small>
+                                            </div>
+                                            
+                                            <div class="col-12">
+                                                <label class="form-label">Address *</label>
+                                                <textarea class="form-control" id="address" rows="2" required></textarea>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <label class="form-label">City *</label>
+                                                <input type="text" class="form-control" id="city" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">District *</label>
+                                                <select class="form-select" id="district" required>
+                                                    <option value="">Select District</option>
+                                                    <option value="Colombo">Colombo</option>
+                                                    <option value="Gampaha">Gampaha</option>
+                                                    <option value="Kalutara">Kalutara</option>
+                                                    <option value="Kandy">Kandy</option>
+                                                    <option value="Matale">Matale</option>
+                                                    <option value="Nuwara Eliya">Nuwara Eliya</option>
+                                                    <option value="Galle">Galle</option>
+                                                    <option value="Matara">Matara</option>
+                                                    <option value="Hambantota">Hambantota</option>
+                                                    <option value="Jaffna">Jaffna</option>
+                                                    <option value="Mannar">Mannar</option>
+                                                    <option value="Vavuniya">Vavuniya</option>
+                                                    <option value="Mullaitivu">Mullaitivu</option>
+                                                    <option value="Kilinochchi">Kilinochchi</option>
+                                                    <option value="Batticaloa">Batticaloa</option>
+                                                    <option value="Ampara">Ampara</option>
+                                                    <option value="Trincomalee">Trincomalee</option>
+                                                    <option value="Kurunegala">Kurunegala</option>
+                                                    <option value="Puttalam">Puttalam</option>
+                                                    <option value="Anuradhapura">Anuradhapura</option>
+                                                    <option value="Polonnaruwa">Polonnaruwa</option>
+                                                    <option value="Badulla">Badulla</option>
+                                                    <option value="Moneragala">Moneragala</option>
+                                                    <option value="Ratnapura">Ratnapura</option>
+                                                    <option value="Kegalle">Kegalle</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hospital Staff Fields -->
+                                    <div id="staffFields" style="display: none;">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">First Name *</label>
+                                                <input type="text" class="form-control" id="staffFirstName" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Last Name *</label>
+                                                <input type="text" class="form-control" id="staffLastName" required>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="form-label">NIC Number *</label>
+                                                <input type="text" class="form-control" id="staffNic" required 
+                                                       pattern="^[0-9]{9}[vVxX]?$|^[0-9]{12}$"
+                                                       title="Enter valid Sri Lankan NIC">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">License/Registration Number *</label>
+                                                <input type="text" class="form-control" id="staffLicense" required>
+                                                <small class="text-muted">Medical license or hospital ID</small>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <label class="form-label">Hospital Name *</label>
+                                                <input type="text" class="form-control" id="staffHospital" required>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="form-label">Designation/Role *</label>
+                                                <select class="form-select" id="staffRole" required>
+                                                    <option value="">Select Role</option>
+                                                    <option value="Doctor">Doctor</option>
+                                                    <option value="Nurse">Nurse</option>
+                                                    <option value="Lab Technician">Lab Technician</option>
+                                                    <option value="Blood Bank Manager">Blood Bank Manager</option>
+                                                    <option value="Administrator">Administrator</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Department *</label>
+                                                <input type="text" class="form-control" id="staffDepartment" required>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="form-label">Email Address *</label>
+                                                <input type="email" class="form-control" id="staffEmail" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Phone Number *</label>
+                                                <input type="tel" class="form-control" id="staffPhone" required 
+                                                       pattern="[0-9]{10}" title="10 digit phone number">
+                                            </div>
+
+                                            <div class="col-12">
+                                                <label class="form-label">Hospital Address *</label>
+                                                <textarea class="form-control" id="staffAddress" rows="2" required></textarea>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="form-label">City *</label>
+                                                <input type="text" class="form-control" id="staffCity" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">District *</label>
+                                                <select class="form-select" id="staffDistrict" required>
+                                                    <option value="">Select District</option>
+                                                    <option value="Colombo">Colombo</option>
+                                                    <option value="Gampaha">Gampaha</option>
+                                                    <option value="Kalutara">Kalutara</option>
+                                                    <option value="Kandy">Kandy</option>
+                                                    <option value="Matale">Matale</option>
+                                                    <option value="Nuwara Eliya">Nuwara Eliya</option>
+                                                    <option value="Galle">Galle</option>
+                                                    <option value="Matara">Matara</option>
+                                                    <option value="Hambantota">Hambantota</option>
+                                                    <option value="Jaffna">Jaffna</option>
+                                                    <option value="Mannar">Mannar</option>
+                                                    <option value="Vavuniya">Vavuniya</option>
+                                                    <option value="Mullaitivu">Mullaitivu</option>
+                                                    <option value="Kilinochchi">Kilinochchi</option>
+                                                    <option value="Batticaloa">Batticaloa</option>
+                                                    <option value="Ampara">Ampara</option>
+                                                    <option value="Trincomalee">Trincomalee</option>
+                                                    <option value="Kurunegala">Kurunegala</option>
+                                                    <option value="Puttalam">Puttalam</option>
+                                                    <option value="Anuradhapura">Anuradhapura</option>
+                                                    <option value="Polonnaruwa">Polonnaruwa</option>
+                                                    <option value="Badulla">Badulla</option>
+                                                    <option value="Moneragala">Moneragala</option>
+                                                    <option value="Ratnapura">Ratnapura</option>
+                                                    <option value="Kegalle">Kegalle</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-4 d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="prevStep(1)">
+                                            <i class="fas fa-arrow-left me-2"></i>Back
+                                        </button>
+                                        <button type="button" class="btn btn-danger px-5" onclick="validateAndGoToStep3()">
+                                            Next <i class="fas fa-arrow-right ms-2"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Health Information -->
+                    <div class="registration-form-step" id="step3">
+                        <div class="card border-0 shadow-lg">
+                            <div class="card-header bg-white py-4">
+                                <h3 class="fw-bold mb-0">Health Information</h3>
+                                <p class="text-muted mb-0">Medical details for safe donation</p>
+                            </div>
+                            <div class="card-body p-4">
+                                <form id="healthInfoForm">
+                                    <div class="mb-4">
+                                        <h5 class="fw-bold mb-3">Health Questionnaire</h5>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="goodHealth">
+                                            <label class="form-check-label" for="goodHealth">
+                                                I confirm that I am in good health and feel well today
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="noSickness">
+                                            <label class="form-check-label" for="noSickness">
+                                                I have not had any sickness (cold, flu, etc.) in the last 2 weeks
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="noMedication">
+                                            <label class="form-check-label" for="noMedication">
+                                                I am not currently taking any antibiotics or medication
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="noRecentSurgery">
+                                            <label class="form-check-label" for="noRecentSurgery">
+                                                I have not had any surgery in the last 6 months
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="noPregnancy">
+                                            <label class="form-check-label" for="noPregnancy">
+                                                I am not pregnant or have not given birth in the last 6 months
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="noTattoo">
+                                            <label class="form-check-label" for="noTattoo">
+                                                I have not had a tattoo or piercing in the last 6 months
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="weightRequirement">
+                                            <label class="form-check-label" for="weightRequirement">
+                                                My weight is above 50kg (110 lbs)
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <label class="form-label">Any known health conditions or allergies</label>
+                                        <textarea class="form-control" id="healthConditions" rows="3" 
+                                                  placeholder="List any health conditions, allergies, or medications you're taking"></textarea>
+                                    </div>
+                                    
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Last Donation Date (if any)</label>
+                                            <input type="date" class="form-control" id="lastDonation">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Preferred Donation Type</label>
+                                            <select class="form-select" id="donationType">
+                                                <option value="Whole Blood">Whole Blood</option>
+                                                <option value="Plasma">Plasma</option>
+                                                <option value="Platelets">Platelets</option>
+                                                <option value="Any">Any (Based on need)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-4 d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="prevStep(2)">
+                                            <i class="fas fa-arrow-left me-2"></i>Back
+                                        </button>
+                                        <button type="button" class="btn btn-danger px-5" onclick="validateAndGoToStep4()">
+                                            Next <i class="fas fa-arrow-right ms-2"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Account Setup & Review -->
+                    <div class="registration-form-step" id="step4">
+                        <div class="card border-0 shadow-lg">
+                            <div class="card-header bg-white py-4">
+                                <h3 class="fw-bold mb-0">Account Setup & Review</h3>
+                                <p class="text-muted mb-0">Create your account and review information</p>
+                            </div>
+                            <div class="card-body p-4">
+                                <!-- Review Information -->
+                                <div class="review-section mb-4">
+                                    <h5 class="fw-bold mb-3">Review Your Information</h5>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <p><strong>Account Type:</strong> <span id="reviewAccountType">Regular Donor</span></p>
+                                            <p><strong>Name:</strong> <span id="reviewName"></span></p>
+                                            <p><strong>NIC:</strong> <span id="reviewNIC"></span></p>
+                                            <p><strong>Date of Birth:</strong> <span id="reviewDOB"></span></p>
+                                            <p><strong>Gender:</strong> <span id="reviewGender"></span></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Blood Type:</strong> <span id="reviewBloodType"></span></p>
+                                            <p><strong>Email:</strong> <span id="reviewEmail"></span></p>
+                                            <p><strong>Phone:</strong> <span id="reviewPhone"></span></p>
+                                            <p><strong>Location:</strong> <span id="reviewLocation"></span></p>
+                                            <p><strong>Donation Type:</strong> <span id="reviewDonationType"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Account Credentials -->
+                                <div class="mb-4">
+                                    <h5 class="fw-bold mb-3">Create Account Credentials</h5>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Username *</label>
+                                            <input type="text" class="form-control" id="username" required>
+                                            <small class="text-muted">Choose a unique username</small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Password *</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="password" required>
+                                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </div>
+                                            <div class="password-strength">
+                                                <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                                            </div>
+                                            <small class="text-muted">Password strength: <span id="passwordStrengthText">None</span></small>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Confirm Password *</label>
+                                            <input type="password" class="form-control" id="confirmPassword" required>
+                                            <div class="invalid-feedback" id="passwordMatchError">
+                                                Passwords do not match
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Security Question *</label>
+                                            <select class="form-select" id="securityQuestion" required>
+                                                <option value="">Select a security question</option>
+                                                <option value="pet">What was your first pet's name?</option>
+                                                <option value="school">What was the name of your first school?</option>
+                                                <option value="city">In what city were you born?</option>
+                                                <option value="mother">What is your mother's maiden name?</option>
+                                                <option value="car">What was your first car model?</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-12">
+                                            <label class="form-label">Security Answer *</label>
+                                            <input type="text" class="form-control" id="securityAnswer" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Terms & Conditions -->
+                                <div class="mb-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="termsAgreement" required>
+                                        <label class="form-check-label" for="termsAgreement">
+                                            I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a> 
+                                            and <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>
+                                        </label>
+                                    </div>
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" id="emailConsent">
+                                        <label class="form-check-label" for="emailConsent">
+                                            I consent to receive email notifications about blood donation opportunities and updates
+                                        </label>
+                                    </div>
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" id="emergencyConsent" checked>
+                                        <label class="form-check-label" for="emergencyConsent">
+                                            I consent to be contacted during emergency blood requirements
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="prevStep(3)">
+                                        <i class="fas fa-arrow-left me-2"></i>Back
+                                    </button>
+                                    <button type="button" class="btn btn-success btn-lg px-5" onclick="submitRegistration()">
+                                        <i class="fas fa-check me-2"></i>Complete Registration
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Registration Success -->
+                    <div class="registration-form-step" id="step5">
+                        <div class="card border-0 shadow-lg">
+                            <div class="card-body p-5 text-center">
+                                <div class="success-icon mb-4">
+                                    <i class="fas fa-check-circle fa-5x text-success"></i>
+                                </div>
+                                <h3 class="fw-bold mb-3">Registration Successful!</h3>
+                                <p class="lead mb-4">
+                                    Thank you for joining the LifeFlow family. Your account has been created successfully.
+                                </p>
+                                <p class="text-muted mb-4">
+                                    We've sent a verification email to <span id="registeredEmail" class="fw-bold"></span>. 
+                                    Please verify your email to activate your account.
+                                </p>
+                                <div class="row g-3 justify-content-center">
+                                    <div class="col-md-4">
+                                        <a href="login.html" class="btn btn-danger w-100">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Login Now
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a href="dashboard.html" class="btn btn-outline-danger w-100">
+                                            <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a href="index.html" class="btn btn-outline-secondary w-100">
+                                            <i class="fas fa-home me-2"></i>Back to Home
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Terms Modal -->
+    <div class="modal fade" id="termsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Terms and Conditions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>1. Eligibility</h6>
+                    <p>You must be at least 18 years old and meet all health requirements to register as a blood donor.</p>
+                    
+                    <h6 class="mt-4">2. Data Usage</h6>
+                    <p>Your personal and health information will be used solely for blood donation purposes and emergency coordination.</p>
+                    
+                    <h6 class="mt-4">3. Donor Responsibilities</h6>
+                    <p>As a registered donor, you agree to provide accurate health information and update your availability status regularly.</p>
+                    
+                    <h6 class="mt-4">4. Emergency Contact</h6>
+                    <p>You consent to be contacted during emergency blood requirements via phone, SMS, or email.</p>
+                    
+                    <h6 class="mt-4">5. Privacy</h6>
+                    <p>Your information will be protected according to Sri Lankan data protection laws and will not be shared with third parties.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Modal -->
+    <div class="modal fade" id="privacyModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Privacy Policy</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>1. Information Collection</h6>
+                    <p>We collect personal information, health data, and location information necessary for blood donation coordination.</p>
+                    
+                    <h6 class="mt-4">2. Data Protection</h6>
+                    <p>All data is encrypted and stored securely. Access is restricted to authorized personnel only.</p>
+                    
+                    <h6 class="mt-4">3. Usage Purpose</h6>
+                    <p>Your data is used for donor matching, emergency alerts, health tracking, and system improvement.</p>
+                    
+                    <h6 class="mt-4">4. Data Sharing</h6>
+                    <p>We only share necessary information with hospitals during emergency blood requests.</p>
+                    
+                    <h6 class="mt-4">5. Your Rights</h6>
+                    <p>You have the right to access, correct, or delete your personal information at any time.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+<footer class="bg-dark text-white pt-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="mb-4 d-flex align-items-center gap-3">
+                    <!-- Your Blood Logo from folder - Increased Size -->
+                    <img src="blood logo.png" alt="LifeFlow Blood Logo" height="120" width="120" style="object-fit: contain;" class="mb-3">
+                    <div>
+                        <h2 class="fw-bold mb-0" style="font-size: 2.5rem;">Life<span class="text-danger">Flow</span></h2>
+                        <p class="text-light mt-2 mb-0" style="font-size: 1rem;">Saving Lives Together</p>
+                    </div>
+                </div>
+                <p class="text-light mt-3">Sri Lanka's premier blood bank management system connecting donors with those in need.</p>
+                
+                <div class="social-links d-flex gap-3 mt-4">
+                    <a href="https://www.facebook.com/lifeflow.lk" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Facebook" title="Follow us on Facebook" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://twitter.com/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Twitter" title="Follow us on Twitter" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Instagram" title="Follow us on Instagram" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on LinkedIn" title="Follow us on LinkedIn" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on YouTube" title="Follow us on YouTube" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-4">
+                <h5 class="fw-bold mb-4">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="index.html" class="text-light text-decoration-none hover-effect">Home</a></li>
+                    <li class="mb-2"><a href="pages/about.html" class="text-light text-decoration-none hover-effect">About Us</a></li>
+                    <li class="mb-2"><a href="pages/services.html" class="text-light text-decoration-none hover-effect">Services</a></li>
+                    <li class="mb-2"><a href="pages/donors.html" class="text-light text-decoration-none hover-effect">Find Donors</a></li>
+                    <li class="mb-2"><a href="pages/campaigns.html" class="text-light text-decoration-none hover-effect">Campaigns</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <h5 class="fw-bold mb-4">Important Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="pages/emergency.html" class="text-light text-decoration-none hover-effect">Emergency Request</a></li>
+                    <li class="mb-2"><a href="blog.html" class="text-light text-decoration-none hover-effect">Health Achievements</a></li>
+                    <li class="mb-2"><a href="contact.html" class="text-light text-decoration-none hover-effect">Contact Us</a></li>
+                    <li class="mb-2"><a href="terms.html" class="text-light text-decoration-none hover-effect">Terms & Conditions</a></li>
+                    <li class="mb-2"><a href="privacy.html" class="text-light text-decoration-none hover-effect">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <h5 class="fw-bold mb-4">Contact Info</h5>
+                <ul class="list-unstyled text-light">
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-map-marker-alt text-danger me-3 mt-1"></i>
+                        <span>Faculty of Indigenous Health Sciences and Technology,<br>
+                        Gampaha Wickramarachchi University of Indigenous Medicine,<br>
+                        Sri Lanka</span>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-phone-alt text-danger me-3"></i>
+                        <span>Emergency: 1990<br>
+                        General: +94 11 234 5678</span>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-envelope text-danger me-3"></i>
+                        <span>help@lifeflow.lk</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="bg-light my-5" style="opacity: 0.2;">
+
+        <div class="row">
+            <div class="col-12 text-center">
+               <p class="mb-0">&copy; 2025 LifeFlow Blood Management System. All rights reserved. <span class="text-danger">🩸</span> Saving lives together.</p>
+        </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Main JavaScript -->
+    <script>
+        // Initialize AOS
+        AOS.init();
+        
+        // Registration Variables
+        let currentStep = 1;
+        let accountType = 'donor';
+        let formData = {};
+        
+        // Make functions globally available
+        window.nextStep = nextStep;
+        window.prevStep = prevStep;
+        window.validateAndGoToStep3 = validateAndGoToStep3;
+        window.validateAndGoToStep4 = validateAndGoToStep4;
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded - initializing registration form');
+            
+            // Donor type selection
+            document.querySelectorAll('.donor-type-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('.donor-type-card').forEach(c => {
+                        c.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    accountType = this.dataset.type;
+                });
+            });
+            
+            // Set first card as selected by default
+            const firstCard = document.querySelector('.donor-type-card');
+            if (firstCard) {
+                firstCard.classList.add('selected');
+            }
+            
+            // Password strength check
+            const passwordInput = document.getElementById('password');
+            if (passwordInput) {
+                passwordInput.addEventListener('input', checkPasswordStrength);
+            }
+            
+            // Password toggle
+            const togglePassword = document.getElementById('togglePassword');
+            if (togglePassword) {
+                togglePassword.addEventListener('click', function() {
+                    const passwordInput = document.getElementById('password');
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                });
+            }
+            
+            // Confirm password validation
+            const confirmPassword = document.getElementById('confirmPassword');
+            if (confirmPassword) {
+                confirmPassword.addEventListener('input', validatePasswordMatch);
+            }
+            
+            // Set max date for DOB (18 years ago)
+            const dobInput = document.getElementById('dob');
+            if (dobInput) {
+                const today = new Date();
+                const eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+                const maxDate = eighteenYearsAgo.toISOString().split('T')[0];
+                dobInput.setAttribute('max', maxDate);
+            }
+        });
+        
+        // Navigation Functions
+        function nextStep(step) {
+            console.log('Moving to step:', step);
+            
+            // Update stepper
+            document.querySelectorAll('.step-circle').forEach((circle, index) => {
+                const stepNum = index + 1;
+                circle.classList.remove('active', 'completed');
+                
+                if (stepNum < step) {
+                    circle.classList.add('completed');
+                } else if (stepNum === step) {
+                    circle.classList.add('active');
+                }
+            });
+            
+            // Update connectors
+            document.querySelectorAll('.step-connector').forEach((connector, index) => {
+                const connectorNum = index + 1;
+                if (connectorNum < step - 1) {
+                    connector.classList.add('active');
+                } else {
+                    connector.classList.remove('active');
+                }
+            });
+            
+            // Update labels
+            document.querySelectorAll('.step-label').forEach((label, index) => {
+                const stepNum = index + 1;
+                if (stepNum === step) {
+                    label.classList.add('active');
+                } else {
+                    label.classList.remove('active');
+                }
+            });
+            
+            // Show step
+            document.querySelectorAll('.registration-form-step').forEach(stepEl => {
+                stepEl.classList.remove('active');
+            });
+            
+            const targetStep = document.getElementById('step' + step);
+            if (targetStep) {
+                targetStep.classList.add('active');
+            }
+            
+            currentStep = step;
+            
+            // Update form fields visibility for Step 2
+            if (step === 2) {
+                updateStep2Fields();
+            }
+            
+            // Update review section if on step 4
+            if (step === 4) {
+                updateReviewSection();
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateStep2Fields() {
+            const donorFields = document.getElementById('donorFields');
+            const staffFields = document.getElementById('staffFields');
+            const step2Title = document.getElementById('step2Title');
+            const step2Subtitle = document.getElementById('step2Subtitle');
+            
+            if (accountType === 'donor') {
+                donorFields.style.display = 'block';
+                staffFields.style.display = 'none';
+                step2Title.textContent = 'Personal Information';
+                step2Subtitle.textContent = 'Tell us about yourself';
+            } else if (accountType === 'hospital') {
+                donorFields.style.display = 'none';
+                staffFields.style.display = 'block';
+                step2Title.textContent = 'Hospital Staff Information';
+                step2Subtitle.textContent = 'Verify your hospital credentials';
+            }
+        }
+        
+        function prevStep(step) {
+            nextStep(step);
+        }
+        
+        // Validation Functions
+        function validateStep1() {
+            if (!accountType) {
+                alert('Please select an account type');
+                return false;
+            }
+            return true;
+        }
+        
+        function validateAndGoToStep3() {
+            if (validateStep2()) {
+                // For hospital staff, skip health info and go to step 4
+                if (accountType === 'hospital') {
+                    nextStep(4);
+                } else {
+                    // For donors, go to step 3 (health info)
+                    nextStep(3);
+                }
+            }
+        }
+        
+        function validateAndGoToStep4() {
+            // Hospital staff skip health info, so only validate for donors
+            if (accountType === 'donor') {
+                if (validateStep3()) {
+                    nextStep(4);
+                }
+            } else {
+                nextStep(4);
+            }
+        }
+        
+        function validateStep2() {
+            console.log('Validating step 2 for:', accountType);
+            
+            if (accountType === 'donor') {
+                return validateDonorStep2();
+            } else if (accountType === 'hospital') {
+                return validateStaffStep2();
+            }
+            return false;
+        }
+
+        function validateDonorStep2() {
+            const required = ['firstName', 'lastName', 'nic', 'dob', 'gender', 'bloodType', 'email', 'phone', 'address', 'city', 'district'];
+            
+            // Check required fields
+            for (let field of required) {
+                const input = document.getElementById(field);
+                if (!input || !input.value.trim()) {
+                    alert(`Please fill in ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`);
+                    if (input) input.focus();
+                    return false;
+                }
+            }
+            
+            // Validate email
+            const email = document.getElementById('email').value;
+            if (!validateEmail(email)) {
+                alert('Please enter a valid email address');
+                return false;
+            }
+            
+            // Validate phone
+            const phone = document.getElementById('phone').value;
+            if (!/^[0-9]{10}$/.test(phone)) {
+                alert('Please enter a valid 10-digit phone number');
+                return false;
+            }
+            
+            // Validate age (must be at least 18)
+            const dob = new Date(document.getElementById('dob').value);
+            const today = new Date();
+            const age = today.getFullYear() - dob.getFullYear();
+            const monthDiff = today.getMonth() - dob.getMonth();
+            
+            if (age < 18 || (age === 18 && monthDiff < 0) || (age === 18 && monthDiff === 0 && today.getDate() < dob.getDate())) {
+                alert('You must be at least 18 years old to register');
+                return false;
+            }
+            
+            // Validate NIC
+            const nic = document.getElementById('nic').value;
+            if (!/^[0-9]{9}[vVxX]?$|^[0-9]{12}$/.test(nic)) {
+                alert('Please enter a valid Sri Lankan NIC number');
+                return false;
+            }
+            
+            // Save data
+            formData.personal = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                nic: nic,
+                dob: document.getElementById('dob').value,
+                gender: document.getElementById('gender').value,
+                bloodType: document.getElementById('bloodType').value,
+                email: email,
+                phone: phone,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                district: document.getElementById('district').value
+            };
+            
+            return true;
+        }
+
+        function validateStaffStep2() {
+            const required = ['staffFirstName', 'staffLastName', 'staffNic', 'staffLicense', 'staffHospital', 'staffRole', 'staffDepartment', 'staffEmail', 'staffPhone', 'staffAddress', 'staffCity', 'staffDistrict'];
+            
+            // Check required fields
+            for (let field of required) {
+                const input = document.getElementById(field);
+                if (!input || !input.value.trim()) {
+                    alert(`Please fill in all required fields`);
+                    if (input) input.focus();
+                    return false;
+                }
+            }
+            
+            // Validate email
+            const email = document.getElementById('staffEmail').value;
+            if (!validateEmail(email)) {
+                alert('Please enter a valid email address');
+                return false;
+            }
+            
+            // Validate phone
+            const phone = document.getElementById('staffPhone').value;
+            if (!/^[0-9]{10}$/.test(phone)) {
+                alert('Please enter a valid 10-digit phone number');
+                return false;
+            }
+            
+            // Validate NIC
+            const nic = document.getElementById('staffNic').value;
+            if (!/^[0-9]{9}[vVxX]?$|^[0-9]{12}$/.test(nic)) {
+                alert('Please enter a valid Sri Lankan NIC number');
+                return false;
+            }
+            
+            // Save data
+            formData.personal = {
+                firstName: document.getElementById('staffFirstName').value,
+                lastName: document.getElementById('staffLastName').value,
+                nic: nic,
+                email: email,
+                phone: phone,
+                hospital: document.getElementById('staffHospital').value,
+                role: document.getElementById('staffRole').value,
+                license: document.getElementById('staffLicense').value,
+                department: document.getElementById('staffDepartment').value,
+                address: document.getElementById('staffAddress').value,
+                city: document.getElementById('staffCity').value,
+                district: document.getElementById('staffDistrict').value
+            };
+            
+            return true;
+        }
+        
+        function validateStep3() {
+            console.log('Validating step 3');
+            
+            const requiredCheckboxes = ['goodHealth', 'noSickness', 'noMedication', 'noRecentSurgery', 'weightRequirement'];
+            
+            for (let checkboxId of requiredCheckboxes) {
+                const checkbox = document.getElementById(checkboxId);
+                if (!checkbox || !checkbox.checked) {
+                    alert('Please confirm all health requirements to proceed');
+                    return false;
+                }
+            }
+            
+            // Save data
+            formData.health = {
+                healthConditions: document.getElementById('healthConditions').value,
+                lastDonation: document.getElementById('lastDonation').value,
+                donationType: document.getElementById('donationType').value
+            };
+            
+            return true;
+        }
+        
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthBar = document.getElementById('passwordStrengthBar');
+            const strengthText = document.getElementById('passwordStrengthText');
+            
+            let strength = 0;
+            let text = 'None';
+            let color = '';
+            
+            if (password.length >= 8) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            
+            switch(strength) {
+                case 0:
+                    text = 'None';
+                    color = '';
+                    break;
+                case 1:
+                    text = 'Weak';
+                    color = 'strength-weak';
+                    break;
+                case 2:
+                    text = 'Fair';
+                    color = 'strength-fair';
+                    break;
+                case 3:
+                    text = 'Good';
+                    color = 'strength-good';
+                    break;
+                case 4:
+                    text = 'Strong';
+                    color = 'strength-strong';
+                    break;
+            }
+            
+            strengthBar.className = 'password-strength-bar ' + color;
+            strengthBar.style.width = (strength * 25) + '%';
+            if (strengthText) strengthText.textContent = text;
+        }
+        
+        function validatePasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorElement = document.getElementById('passwordMatchError');
+            
+            if (confirmPassword && password !== confirmPassword) {
+                if (errorElement) errorElement.style.display = 'block';
+                return false;
+            } else {
+                if (errorElement) errorElement.style.display = 'none';
+                return true;
+            }
+        }
+        
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        function updateReviewSection() {
+            if (formData.personal) {
+                document.getElementById('reviewAccountType').textContent = accountType === 'donor' ? 'Regular Donor' : 'Hospital Staff';
+                document.getElementById('reviewName').textContent = `${formData.personal.firstName} ${formData.personal.lastName}`;
+                document.getElementById('reviewNIC').textContent = formData.personal.nic;
+                
+                if (accountType === 'donor') {
+                    const dobDate = new Date(formData.personal.dob);
+                    document.getElementById('reviewDOB').textContent = dobDate.toLocaleDateString();
+                    document.getElementById('reviewGender').textContent = formData.personal.gender;
+                    document.getElementById('reviewBloodType').textContent = formData.personal.bloodType;
+                    document.getElementById('reviewDonationType').textContent = formData.health ? formData.health.donationType : 'Whole Blood';
+                } else if (accountType === 'hospital') {
+                    document.getElementById('reviewDOB').textContent = formData.personal.hospital;
+                    document.getElementById('reviewGender').textContent = formData.personal.role;
+                    document.getElementById('reviewBloodType').textContent = formData.personal.department;
+                    document.getElementById('reviewDonationType').textContent = formData.personal.license;
+                }
+                
+                document.getElementById('reviewEmail').textContent = formData.personal.email;
+                document.getElementById('reviewPhone').textContent = formData.personal.phone;
+                document.getElementById('reviewLocation').textContent = `${formData.personal.city}, ${formData.personal.district}`;
+            }
+        }
+        
+        // Temporary submit function (will be overridden by Firebase)
+        window.submitRegistration = function() {
+            alert('Firebase integration is being set up. Please wait...');
+        };
+    </script>
+
+<!-- Firebase Integration -->
+<script type="module">
+
+
+// Firebase imports
+
+import { initializeApp } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+
+import { 
+
+getFirestore,
+
+doc,
+
+setDoc,
+
+serverTimestamp
+
+}
+
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+
+
+import {
+
+getAuth,
+
+createUserWithEmailAndPassword
+
+}
+
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+
+
+
+
+// Firebase configuration
+
+const firebaseConfig = {
+
+
+apiKey: "AIzaSyAqUpugEG4CABz266QBIE_ldWgR1eWPXqk",
+
+authDomain: "blood-bank-website-c2625.firebaseapp.com",
+
+projectId: "blood-bank-website-c2625",
+
+storageBucket: "blood-bank-website-c2625.firebasestorage.app",
+
+messagingSenderId: "778577693727",
+
+appId: "1:778577693727:web:4818be5b9cef354c4d192a",
+
+measurementId: "G-3XL1ZGCJ1R"
+
+
+};
+
+
+
+
+// Initialize Firebase
+
+const app = initializeApp(firebaseConfig);
+
+
+const db = getFirestore(app);
+
+
+const auth = getAuth(app);
+
+
+
+console.log("Firebase connected");
+
+
+
+
+
+
+// Registration Function
+
+
+window.submitRegistration = async function(){
+
+
+
+console.log("Registration started");
+
+
+
+const spinner = document.getElementById('loadingSpinner');
+
+
+if(spinner)
+
+spinner.classList.add('active');
+
+
+
+
+
+try {
+
+
+
+const username = document.getElementById('username').value;
+
+
+const password = document.getElementById('password').value;
+
+
+const confirmPassword = document.getElementById('confirmPassword').value;
+
+
+const securityQuestion = document.getElementById('securityQuestion').value;
+
+
+const securityAnswer = document.getElementById('securityAnswer').value;
+
+
+const termsAgreement = document.getElementById('termsAgreement').checked;
+
+
+
+
+
+// Validation
+
+
+if(!username || !password || !confirmPassword){
+
+
+alert("Please fill required fields");
+
+
+spinner?.classList.remove('active');
+
+return;
+
+}
+
+
+
+if(password !== confirmPassword){
+
+
+alert("Passwords do not match");
+
+
+spinner?.classList.remove('active');
+
+return;
+
+}
+
+
+
+
+if(password.length < 6){
+
+
+alert("Password must be minimum 6 characters");
+
+
+spinner?.classList.remove('active');
+
+return;
+
+}
+
+
+
+
+
+if(!termsAgreement){
+
+
+alert("Accept Terms and Conditions");
+
+
+spinner?.classList.remove('active');
+
+return;
+
+
+}
+
+
+
+
+
+// Create Auth account
+
+
+const userCredential = await createUserWithEmailAndPassword(
+
+
+auth,
+
+
+formData.personal.email,
+
+
+password
+
+
+);
+
+
+
+
+
+// Firebase UID
+
+
+const uid = userCredential.user.uid;
+
+
+
+
+
+console.log("User UID:",uid);
+
+
+
+
+
+
+// Prepare donor data
+
+
+let registrationData = {
+
+
+
+uid:uid,
+
+
+
+accountType:accountType,
+
+
+
+// personal
+
+firstName: formData.personal.firstName,
+
+lastName: formData.personal.lastName,
+
+
+nic: formData.personal.nic,
+
+
+email: formData.personal.email,
+
+
+phone: formData.personal.phone,
+
+
+city: formData.personal.city,
+
+
+district: formData.personal.district,
+
+
+
+
+
+// account
+
+
+username:username,
+
+
+securityQuestion:securityQuestion,
+
+
+securityAnswer:securityAnswer,
+
+
+
+emailConsent:
+
+document.getElementById('emailConsent').checked,
+
+
+
+emergencyConsent:
+
+document.getElementById('emergencyConsent').checked,
+
+
+
+
+
+createdAt:serverTimestamp(),
+
+
+
+status:"active",
+
+
+
+isActive:true
+
+
+};
+
+
+
+
+
+
+// Donor extra data
+
+
+if(accountType==="donor"){
+
+
+
+registrationData.dateOfBirth =
+formData.personal.dob;
+
+
+
+registrationData.gender =
+formData.personal.gender;
+
+
+
+registrationData.bloodType =
+formData.personal.bloodType;
+
+
+
+registrationData.address =
+formData.personal.address;
+
+
+
+registrationData.healthConditions =
+formData.health.healthConditions || "";
+
+
+
+registrationData.donationCount = 0;
+
+
+
+registrationData.lastDonation = null;
+
+
+}
+
+
+
+
+
+
+
+// SAVE USING UID (important)
+
+
+if(accountType==="donor"){
+
+
+
+await setDoc(
+
+
+doc(db,"donors",uid),
+
+
+registrationData
+
+
+);
+
+
+
+}
+
+else{
+
+
+
+await setDoc(
+
+
+doc(db,"hospital_staff",uid),
+
+
+registrationData
+
+
+);
+
+
+
+}
+
+
+
+
+
+
+
+console.log("Data saved");
+
+
+
+
+
+alert("Registration Successful");
+
+
+
+if(spinner)
+
+spinner.classList.remove('active');
+
+
+
+
+
+// go login
+
+
+window.location.href="login.html";
+
+
+
+
+
+}
+
+catch(error){
+
+
+
+console.error(error);
+
+
+
+alert(
+"Registration Error: "+error.message
+);
+
+
+
+if(spinner)
+
+spinner.classList.remove('active');
+
+
+
+}
+
+
+
+};
+
+
+
+
+
+console.log("Firebase registration ready");
+
+
+
+</script>
+
+</body>
+</html>

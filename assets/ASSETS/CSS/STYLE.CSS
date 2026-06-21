@@ -1,0 +1,339 @@
+/* ===== LifeFlow - Main Styles ===== */
+:root {
+    --primary: #e53935;
+    --primary-dark: #b71c1c;
+    --secondary: #2d3748;
+    --light: #f8f9fa;
+    --dark: #1a202c;
+    --radius: 12px;
+    --transition: all 0.3s ease;
+}
+
+/* Base Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--dark);
+    padding-top: 76px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+}
+
+/* Hero Sections */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 100px 0;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-hero, .services-hero, .find-donors-hero, 
+.campaigns-hero, .blog-hero, .contact-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 80px 0;
+    color: white;
+}
+
+/* Logo */
+.logo-placeholder {
+    display: flex;
+    align-items: center;
+}
+
+.brand-name {
+    font-size: 1.8rem;
+    font-weight: 900;
+}
+
+/* Search Box */
+.search-box {
+    border-radius: 50px;
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+}
+
+.search-box .form-control {
+    border: none;
+    padding-left: 20px;
+}
+
+.search-box .form-control:focus {
+    box-shadow: none;
+}
+
+/* Cards */
+.card {
+    border-radius: var(--radius);
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+}
+
+/* Quick Action Cards */
+.quick-action-card .card {
+    border: 1px solid #dee2e6;
+}
+
+.icon-wrapper {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+/* Feature Cards */
+.feature-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    height: 100%;
+}
+
+.feature-icon {
+    color: var(--primary);
+    margin-bottom: 20px;
+}
+
+/* Urgency Alert */
+.urgency-alert {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border: none;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.9; }
+}
+
+/* CTA Section */
+.cta-section {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+/* Service Category Cards */
+.service-category-card .card-header {
+    border-radius: var(--radius) var(--radius) 0 0 !important;
+}
+
+/* Donor Cards */
+.donor-card {
+    border: 1px solid #dee2e6;
+}
+
+.avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Campaign Cards */
+.campaign-card .progress {
+    border-radius: 4px;
+}
+
+/* Article Cards */
+.article-card {
+    overflow: hidden;
+}
+
+.article-img {
+    background-size: cover;
+    background-position: center;
+}
+
+.article-img-sm {
+    background-size: cover;
+    background-position: center;
+}
+
+/* Contact Info Cards */
+.contact-info-card {
+    border: 1px solid #dee2e6;
+    background: white;
+}
+
+.contact-icon {
+    color: var(--primary);
+}
+
+/* Timeline */
+.story-timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.story-timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--primary);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-date {
+    position: absolute;
+    left: -30px;
+    top: 0;
+    background: var(--primary);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.timeline-content {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+/* Value Cards */
+.value-card {
+    border: 1px solid #dee2e6;
+    background: white;
+}
+
+.value-icon {
+    color: var(--primary);
+}
+
+/* Team Cards */
+.team-card {
+    padding: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: var(--radius);
+    background: white;
+}
+
+/* Footer */
+footer {
+    background: var(--dark);
+}
+
+footer a {
+    color: #adb5bd;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+footer a:hover {
+    color: white;
+}
+
+.social-links .btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .display-3 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-section {
+        padding: 80px 0;
+    }
+    
+    .search-box {
+        margin-top: 15px;
+    }
+}
+
+/* Utility Classes */
+.hover-lift:hover {
+    transform: translateY(-5px);
+}
+
+.backdrop-blur {
+    backdrop-filter: blur(10px);
+}
+
+.bg-gradient-danger {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-dark {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+}
+
+/* Stats Cards */
+.stat-card {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+}
+
+/* Newsletter Card */
+.newsletter-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+/* Active Navigation */
+.nav-link.active {
+    color: var(--primary) !important;
+    font-weight: 600;
+}
+
+/* Button Styles */
+.btn-danger {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-danger:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+/* Badge Styles */
+.badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+/* Table Styles */
+.table th {
+    background: var(--primary);
+    color: white;
+}
+
+.table-hover tbody tr:hover {
+    background: rgba(229, 57, 53, 0.1);
+}

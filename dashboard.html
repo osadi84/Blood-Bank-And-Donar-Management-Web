@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - LifeFlow Blood Management System</title>
+    
+    <!-- Same CSS includes as other pages -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #e53935;
+            --primary-dark: #c62828;
+            --secondary: #333;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .sidebar {
+            min-height: calc(100vh - 76px);
+            background: white;
+            border-right: 1px solid #dee2e6;
+            position: sticky;
+            top: 76px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 2px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .sidebar-menu a:hover {
+            background: #f8f9fa;
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .sidebar-menu a.active {
+            background: rgba(229, 57, 53, 0.1);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+        
+        .sidebar-menu i {
+            width: 24px;
+            margin-right: 12px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .dashboard-header {
+            background: white;
+            border-bottom: 1px solid #dee2e6;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 15px;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(229, 57, 53, 0.3);
+        }
+        
+        .stats-card {
+            border-radius: 15px;
+            padding: 25px 20px;
+            margin-bottom: 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stats-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(45deg);
+            transition: all 0.3s ease;
+        }
+        
+        .stats-card:hover::after {
+            transform: rotate(45deg) scale(1.2);
+        }
+        
+        .stats-card.donations {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .stats-card.impact {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .stats-card.availability {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .stats-card.rewards {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .stats-card h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stats-card p {
+            margin: 0;
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stats-card i {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 3rem;
+            opacity: 0.2;
+            z-index: 0;
+        }
+        
+        .recent-activity {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .recent-activity li {
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            transition: background 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .recent-activity li:hover {
+            background: #f8f9fa;
+            padding-left: 10px;
+        }
+        
+        .recent-activity li:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+        }
+        
+        .activity-icon.donation {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+        }
+        
+        .activity-icon.emergency {
+            background: rgba(245, 87, 108, 0.15);
+            color: #f5576c;
+        }
+        
+        .activity-icon.appointment {
+            background: rgba(67, 233, 123, 0.15);
+            color: #43e97b;
+        }
+        
+        .activity-icon.reward {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        .loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+        
+        .loading-spinner.active {
+            display: flex;
+        }
+        
+        .loading-spinner .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+        
+        .appointment-item {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .appointment-item:hover {
+            background-color: #f8f9fa;
+            transform: translateX(5px);
+        }
+        
+        .btn {
+            cursor: pointer;
+        }
+        
+        .dropdown-item {
+            cursor: pointer;
+        }
+        
+        .emergency-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 350px;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner-border text-danger" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 fw-bold">Loading your dashboard...</p>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="top-bar bg-dark text-white py-2">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <span><i class="fas fa-phone-alt me-2"></i>Emergency: 1990</span>
+                        <span class="d-none d-md-inline"><i class="fas fa-user me-2"></i>Donor Dashboard</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="d-inline-flex align-items-center gap-3">
+                        <div class="theme-switch">
+                            <button class="btn btn-sm btn-outline-light" id="themeToggle" type="button">
+                                <i class="fas fa-moon"></i>
+                            </button>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" 
+                                    data-bs-toggle="dropdown" id="userDropdown">
+                                <i class="fas fa-user me-1"></i><span id="headerUserName">Loading...</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" onclick="window.location.href='profile.html'"><i class="fas fa-user me-2"></i>My Profile</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="window.location.href='settings.html'"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Layout -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-2 col-md-3 sidebar d-none d-md-block">
+                <div class="p-3">
+                    <div class="text-center mb-4">
+                        <div class="user-avatar mx-auto" id="userInitials">JD</div>
+                        <h6 class="fw-bold mb-1" id="sidebarUserName">John Doe</h6>
+                        <p class="text-muted small mb-1" id="sidebarBloodType">Blood Type: <span class="badge bg-danger">O+</span></p>
+                        <p class="text-muted small mb-0" id="sidebarDonorId">Donor ID: Loading...</p>
+                    </div>
+                    
+                    <ul class="sidebar-menu">
+                        <li><a href="#" onclick="window.location.href='dashboard.html'" class="active" id="dashboardLink">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a></li>
+                        <li><a href="#" onclick="window.location.href='profile.html'" id="profileLink">
+                            <i class="fas fa-user"></i> My Profile
+                        </a></li>
+                        <li><a href="#" onclick="window.location.href='donation-history.html'" id="historyLink">
+                            <i class="fas fa-history"></i> Donation History
+                        </a></li>
+                        <li><a href="#" onclick="window.location.href='appointments.html'" id="appointmentsLink">
+                            <i class="fas fa-calendar-check"></i> Appointments
+                            <span class="notification-badge" id="appointmentBadge">0</span>
+                        </a></li>
+                        <li><a href="#" onclick="window.location.href='emergency-alerts.html'" id="alertsLink">
+                            <i class="fas fa-bell"></i> Emergency Alerts
+                        </a></li>
+                        <li><a href="#" onclick="window.location.href='health-records.html'" id="healthLink">
+                            <i class="fas fa-heartbeat"></i> Health Records
+                        </a></li>
+                        <li><a href="#" onclick="window.location.href='rewards.html'" id="rewardsLink">
+                            <i class="fas fa-trophy"></i> Rewards
+                        </a></li>
+                        <li><a href="#" onclick="window.location.href='settings.html'" id="settingsLink">
+                            <i class="fas fa-cog"></i> Settings
+                        </a></li>
+                        <li><a href="#" onclick="window.location.href='help.html'" id="helpLink">
+                            <i class="fas fa-question-circle"></i> Help & Support
+                        </a></li>
+                    </ul>
+                    
+                    <div class="mt-4 p-3 bg-light rounded">
+                        <h6 class="fw-bold mb-3">Quick Actions</h6>
+                        <button class="btn btn-danger btn-sm w-100 mb-2" type="button" onclick="window.location.href='schedule-donation.html'">
+                            <i class="fas fa-plus me-1"></i> Schedule Donation
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm w-100" type="button" onclick="window.location.href='emergency-request.html'">
+                            <i class="fas fa-ambulance me-1"></i> Emergency Request
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-lg-10 col-md-9">
+                <!-- Dashboard Header -->
+                <div class="dashboard-header">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h2 class="fw-bold mb-1" id="welcomeMessage">Welcome back, <span id="userName">Donor</span>!</h2>
+                                <p class="text-muted mb-0" id="lastLoginInfo">Last login: Loading...</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-danger" type="button" onclick="window.location.href='export-report.html'">
+                                        <i class="fas fa-download me-2"></i>Export
+                                    </button>
+                                    <button class="btn btn-danger" type="button" onclick="window.print()">
+                                        <i class="fas fa-print me-2"></i>Print
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dashboard Content -->
+                <div class="container py-4">
+                    <!-- Stats Cards -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-3 col-6">
+                            <div class="stats-card donations" onclick="window.location.href='donation-history.html'">
+                                <h3 id="totalDonations">0</h3>
+                                <p class="mb-0">Total Donations</p>
+                                <i class="fas fa-tint"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="stats-card impact" onclick="showImpactDetails()">
+                                <h3 id="livesImpacted">0</h3>
+                                <p class="mb-0">Lives Impacted</p>
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="stats-card availability" onclick="checkDonationStatus()">
+                                <h3 id="donationStatus">Checking...</h3>
+                                <p class="mb-0">Donation Status</p>
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="stats-card rewards" onclick="window.location.href='rewards.html'">
+                                <h3 id="rewardPoints">0</h3>
+                                <p class="mb-0">Reward Points</p>
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Content Row -->
+                    <div class="row g-4">
+                        <!-- Left Column -->
+                        <div class="col-lg-8">
+                            <!-- Recent Activity -->
+                            <div class="card border-0 shadow-sm mb-4">
+                                <div class="card-header bg-white border-0 py-3">
+                                    <h5 class="fw-bold mb-0">Recent Activity</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="recent-activity" id="recentActivityList">
+                                        <li class="text-center text-muted py-3">Loading activities...</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <!-- Health Status -->
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white border-0 py-3">
+                                    <h5 class="fw-bold mb-0">Health Status</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Hemoglobin Level</strong></p>
+                                            <div class="progress-custom">
+                                                <div class="progress-bar-custom" id="hemoglobinBar" style="width: 0%"></div>
+                                            </div>
+                                            <small class="text-muted" id="hemoglobinValue">Loading...</small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Iron Level</strong></p>
+                                            <div class="progress-custom">
+                                                <div class="progress-bar-custom" id="ironBar" style="width: 0%"></div>
+                                            </div>
+                                            <small class="text-muted" id="ironValue">Loading...</small>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 p-3 bg-light rounded">
+                                        <p class="mb-2"><strong><i class="far fa-calendar me-2"></i>Next Eligible Donation:</strong> <span id="nextEligibleDate">Loading...</span></p>
+                                        <p class="mb-0"><strong><i class="fas fa-stethoscope me-2"></i>Last Health Check:</strong> <span id="lastHealthCheck">Loading...</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Column -->
+                        <div class="col-lg-4">
+                            <!-- Upcoming Appointments -->
+                            <div class="card border-0 shadow-sm mb-4">
+                                <div class="card-header bg-white border-0 py-3">
+                                    <h5 class="fw-bold mb-0">Upcoming Appointments</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="upcomingAppointments">
+                                        <p class="text-muted text-center py-3">No upcoming appointments</p>
+                                    </div>
+                                    <button class="btn btn-outline-danger w-100 mt-2" type="button" onclick="window.location.href='schedule-donation.html'">
+                                        <i class="fas fa-plus me-2"></i>Schedule New
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Quick Stats -->
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white border-0 py-3">
+                                    <h5 class="fw-bold mb-0">Quick Stats</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row text-center">
+                                        <div class="col-6 mb-3">
+                                            <h3 class="fw-bold text-danger" id="quickDonations">0</h3>
+                                            <p class="small text-muted mb-0">Donations</p>
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <h3 class="fw-bold text-danger" id="totalVolume">0L</h3>
+                                            <p class="small text-muted mb-0">Blood Donated</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <h3 class="fw-bold text-danger" id="responseRate">0%</h3>
+                                            <p class="small text-muted mb-0">Response Rate</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <h3 class="fw-bold text-danger" id="donorRating">0★</h3>
+                                            <p class="small text-muted mb-0">Donor Rating</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 p-3 bg-light rounded">
+                                        <p class="small mb-1">
+                                            <i class="fas fa-award text-warning me-2"></i>
+                                            <strong>Current Rank:</strong> <span id="donorRank">Loading...</span>
+                                        </p>
+                                        <p class="small mb-0">
+                                            <i class="fas fa-gift text-danger me-2"></i>
+                                            <strong>Next Reward:</strong> <span id="nextReward">Loading...</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation for Small Screens -->
+    <div class="d-md-none fixed-bottom bg-white border-top py-2">
+        <div class="row text-center">
+            <div class="col-3">
+                <a href="#" onclick="window.location.href='dashboard.html'" class="text-decoration-none text-danger">
+                    <i class="fas fa-tachometer-alt fa-lg"></i><br>
+                    <small>Dashboard</small>
+                </a>
+            </div>
+            <div class="col-3">
+                <a href="#" onclick="window.location.href='profile.html'" class="text-decoration-none text-dark">
+                    <i class="fas fa-user fa-lg"></i><br>
+                    <small>Profile</small>
+                </a>
+            </div>
+            <div class="col-3">
+                <a href="#" onclick="window.location.href='appointments.html'" class="text-decoration-none text-dark">
+                    <i class="fas fa-calendar fa-lg"></i><br>
+                    <small>Appointments</small>
+                </a>
+            </div>
+            <div class="col-3">
+                <a href="#" onclick="logout()" class="text-decoration-none text-dark">
+                    <i class="fas fa-sign-out-alt fa-lg"></i><br>
+                    <small>Logout</small>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emergency Alert Container -->
+    <div id="emergencyAlertContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs, orderBy, limit, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAqUpugEG4CABz266QBIE_ldWgR1eWPXqk",
+            authDomain: "blood-bank-website-c2625.firebaseapp.com",
+            projectId: "blood-bank-website-c2625",
+            storageBucket: "blood-bank-website-c2625.firebasestorage.app",
+            messagingSenderId: "778577693727",
+            appId: "1:778577693727:web:4818be5b9cef354c4d192a",
+            measurementId: "G-3XL1ZGCJ1R"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Global variables
+        let currentUser = null;
+        let userData = null;
+
+        // Initialize AOS
+        AOS.init();
+
+        // Check authentication state
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadUserData(user.uid);
+            } else {
+                // Redirect to login if not authenticated
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Load user data from Firestore
+        async function loadUserData(userId) {
+            showLoading();
+            
+            try {
+                // Get user document
+                const userDoc = await getDoc(doc(db, "donors", userId));
+                
+                if (userDoc.exists()) {
+                    userData = { id: userDoc.id, ...userDoc.data() };
+                    
+                    // Update last login
+                    await updateDoc(doc(db, "donors", userId), {
+                        lastLogin: new Date()
+                    });
+                    
+                    updateDashboardUI();
+                    
+                    // Load additional data
+                    await loadDonationHistory();
+                    await loadAppointments();
+                    await checkEmergencyAlerts();
+                } else {
+                    console.log("No user data found!");
+                    showError("User data not found");
+                }
+            } catch (error) {
+                console.error("Error loading user data:", error);
+                showError("Failed to load dashboard data");
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Update dashboard UI with user data
+        function updateDashboardUI() {
+            if (!userData) return;
+
+            // Update user information
+            const fullName = `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || 'Donor';
+            const firstName = userData.firstName || 'Donor';
+            const initials = (userData.firstName?.[0] || '') + (userData.lastName?.[0] || '') || 'D';
+            
+            // Header
+            document.getElementById('headerUserName').textContent = fullName;
+            document.getElementById('userName').textContent = firstName;
+            document.getElementById('sidebarUserName').textContent = fullName;
+            document.getElementById('userInitials').textContent = initials;
+            
+            // Blood type and ID
+            const bloodType = userData.bloodType || 'O+';
+            document.getElementById('sidebarBloodType').innerHTML = `Blood Type: <span class="badge bg-danger">${bloodType}</span>`;
+            
+            const donorId = userData.donorId || `DNR-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 10000)).padStart(5, '0')}`;
+            document.getElementById('sidebarDonorId').textContent = `Donor ID: ${donorId}`;
+
+            // Stats
+            const donationCount = userData.donationCount || 0;
+            const livesImpacted = donationCount * 3;
+            const rewardPoints = userData.rewardPoints || 0;
+            
+            document.getElementById('totalDonations').textContent = donationCount;
+            document.getElementById('livesImpacted').textContent = livesImpacted;
+            document.getElementById('rewardPoints').textContent = rewardPoints;
+            document.getElementById('quickDonations').textContent = donationCount;
+            
+            // Donation status
+            const lastDonation = userData.lastDonation ? new Date(userData.lastDonation) : null;
+            const nextEligible = lastDonation ? new Date(lastDonation.getTime() + (56 * 24 * 60 * 60 * 1000)) : new Date();
+            const today = new Date();
+            
+            let status = 'Ready';
+            
+            if (lastDonation && nextEligible > today) {
+                const daysLeft = Math.ceil((nextEligible - today) / (1000 * 60 * 60 * 24));
+                status = `${daysLeft} days left`;
+            }
+            
+            document.getElementById('donationStatus').textContent = status;
+            
+            // Next eligible date
+            const nextDate = nextEligible > today ? nextEligible : today;
+            document.getElementById('nextEligibleDate').textContent = nextDate.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            // Health stats
+            const hemoglobin = userData.hemoglobin || 14.5;
+            const iron = userData.iron || 78;
+            
+            document.getElementById('hemoglobinValue').textContent = `${hemoglobin} g/dL`;
+            document.getElementById('hemoglobinBar').style.width = `${(hemoglobin / 18) * 100}%`;
+            
+            document.getElementById('ironValue').textContent = iron > 70 ? 'Good for donation' : 'Needs improvement';
+            document.getElementById('ironBar').style.width = `${iron}%`;
+            
+            // Last health check
+            const lastCheck = userData.lastHealthCheck ? new Date(userData.lastHealthCheck) : new Date();
+            document.getElementById('lastHealthCheck').textContent = lastCheck.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            // Quick stats
+            const totalVolume = (donationCount * 0.45).toFixed(1);
+            document.getElementById('totalVolume').textContent = `${totalVolume}L`;
+            
+            const responseRate = userData.responseRate || 98;
+            document.getElementById('responseRate').textContent = `${responseRate}%`;
+            
+            const rating = userData.rating || 5;
+            document.getElementById('donorRating').textContent = `${rating}★`;
+            
+            // Rank and rewards
+            let rank = 'Bronze Donor';
+            let nextReward = 'Silver Donor';
+            
+            if (donationCount >= 10) {
+                rank = 'Gold Donor';
+                nextReward = 'Platinum Donor';
+            } else if (donationCount >= 5) {
+                rank = 'Silver Donor';
+                nextReward = 'Gold Donor';
+            }
+            
+            document.getElementById('donorRank').textContent = rank;
+            
+            const pointsToNext = donationCount < 5 ? (5 - donationCount) * 100 : 
+                                donationCount < 10 ? (10 - donationCount) * 100 : 0;
+            document.getElementById('nextReward').textContent = `${pointsToNext} points to ${nextReward}`;
+            
+            // Last login
+            const lastLogin = userData.lastLogin ? new Date(userData.lastLogin) : new Date();
+            document.getElementById('lastLoginInfo').textContent = `Last login: ${lastLogin.toLocaleDateString()}`;
+        }
+
+        // Load donation history
+        async function loadDonationHistory() {
+            if (!currentUser) return;
+            
+            try {
+                const donationsRef = collection(db, "donations");
+                const q = query(
+                    donationsRef, 
+                    where("donorId", "==", currentUser.uid),
+                    orderBy("date", "desc"),
+                    limit(5)
+                );
+                
+                const querySnapshot = await getDocs(q);
+                const activities = document.getElementById('recentActivityList');
+                
+                if (querySnapshot.empty) {
+                    activities.innerHTML = '<li class="text-center text-muted py-3" onclick="window.location.href=\'schedule-donation.html\'">No donations yet. Click to schedule your first donation!</li>';
+                    return;
+                }
+                
+                let html = '';
+                querySnapshot.forEach((doc) => {
+                    const donation = doc.data();
+                    const date = new Date(donation.date).toLocaleDateString();
+                    
+                    html += `
+                        <li onclick="window.location.href='donation-details.html?id=${doc.id}'">
+                            <div class="activity-icon donation">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-1">Blood Donation Completed</h6>
+                                <p class="text-muted small mb-0">You donated ${donation.amount || 450}ml of ${donation.bloodType || userData?.bloodType} blood</p>
+                                <small class="text-muted"><i class="far fa-clock me-1"></i> ${date}</small>
+                            </div>
+                        </li>
+                    `;
+                });
+                
+                activities.innerHTML = html;
+            } catch (error) {
+                console.error("Error loading donations:", error);
+            }
+        }
+
+        // Load appointments
+        async function loadAppointments() {
+            if (!currentUser) return;
+            
+            try {
+                const appointmentsRef = collection(db, "appointments");
+                const q = query(
+                    appointmentsRef,
+                    where("donorId", "==", currentUser.uid),
+                    where("date", ">=", new Date()),
+                    orderBy("date", "asc"),
+                    limit(3)
+                );
+                
+                const querySnapshot = await getDocs(q);
+                const appointmentsDiv = document.getElementById('upcomingAppointments');
+                const badge = document.getElementById('appointmentBadge');
+                
+                if (querySnapshot.empty) {
+                    appointmentsDiv.innerHTML = '<p class="text-muted text-center py-3">No upcoming appointments</p>';
+                    badge.textContent = '0';
+                    return;
+                }
+                
+                badge.textContent = querySnapshot.size;
+                
+                let html = '';
+                querySnapshot.forEach((doc) => {
+                    const apt = doc.data();
+                    const date = new Date(apt.date);
+                    
+                    html += `
+                        <div class="mb-3 p-3 border rounded appointment-item" onclick="window.location.href='appointment-details.html?id=${doc.id}'">
+                            <h6 class="fw-bold">${apt.title || 'Blood Donation'}</h6>
+                            <p class="small text-muted mb-1">
+                                <i class="far fa-calendar me-1"></i> ${date.toLocaleDateString()} • ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            </p>
+                            <p class="small text-muted mb-2">
+                                <i class="fas fa-map-marker-alt me-1"></i> ${apt.location || 'Blood Center'}
+                            </p>
+                            <div class="d-flex justify-content-between">
+                                <span class="badge bg-${apt.status === 'confirmed' ? 'success' : 'warning'}">${apt.status || 'Pending'}</span>
+                                <span class="text-danger small" onclick="event.stopPropagation(); rescheduleAppointment('${doc.id}')">Reschedule</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                appointmentsDiv.innerHTML = html;
+            } catch (error) {
+                console.error("Error loading appointments:", error);
+            }
+        }
+
+        // Helper functions
+        function showLoading() {
+            document.getElementById('loadingSpinner').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingSpinner').classList.remove('active');
+        }
+
+        function showError(message) {
+            alert('Error: ' + message);
+        }
+
+        // Export report function
+        window.exportReport = function() {
+            alert('Preparing your report for download...');
+            // In a real app, this would generate a PDF or CSV
+        };
+
+        // Show impact details
+        window.showImpactDetails = function() {
+            const lives = document.getElementById('livesImpacted').textContent;
+            alert(`🎉 Amazing! You've helped save ${lives} lives through your blood donations! Every donation can save up to 3 lives.`);
+        };
+
+        // Check donation status
+        window.checkDonationStatus = function() {
+            const status = document.getElementById('donationStatus').textContent;
+            if (status === 'Ready') {
+                if (confirm('You are eligible to donate blood now! Would you like to schedule a donation?')) {
+                    window.location.href = 'schedule-donation.html';
+                }
+            } else {
+                alert(`You are not eligible to donate yet. Status: ${status}`);
+            }
+        };
+
+        // Reschedule appointment
+        window.rescheduleAppointment = function(appointmentId) {
+            window.location.href = `reschedule-appointment.html?id=${appointmentId}`;
+        };
+
+        // Logout function
+        window.logout = async function() {
+            if (confirm('Are you sure you want to logout?')) {
+                try {
+                    await signOut(auth);
+                    localStorage.removeItem('userToken');
+                    localStorage.removeItem('userData');
+                    window.location.href = 'login.html';
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    alert('Error logging out. Please try again.');
+                }
+            }
+        };
+
+        // Theme toggle
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-bs-theme', newTheme);
+            this.innerHTML = newTheme === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            
+            // Save preference
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        document.getElementById('themeToggle').innerHTML = savedTheme === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+
+        // Check for emergency alerts periodically
+        setInterval(checkEmergencyAlerts, 30000);
+
+        async function checkEmergencyAlerts() {
+            if (!currentUser || !userData) return;
+            
+            try {
+                const alertsRef = collection(db, "emergency_alerts");
+                const q = query(
+                    alertsRef,
+                    where("bloodType", "==", userData.bloodType),
+                    where("status", "==", "active"),
+                    limit(1)
+                );
+                
+                const querySnapshot = await getDocs(q);
+                
+                if (!querySnapshot.empty) {
+                    const alert = querySnapshot.docs[0].data();
+                    showEmergencyAlert(alert);
+                }
+            } catch (error) {
+                console.error("Error checking alerts:", error);
+            }
+        }
+
+        function showEmergencyAlert(alert) {
+            const container = document.getElementById('emergencyAlertContainer');
+            const alertId = 'alert-' + Date.now();
+            
+            const alertHTML = `
+                <div id="${alertId}" class="alert alert-danger alert-dismissible fade show emergency-alert" role="alert">
+                    <h5><i class="fas fa-ambulance me-2"></i>Emergency Alert!</h5>
+                    <p class="mb-2">${alert.message || 'Urgent blood donation needed for your blood type!'}</p>
+                    <p class="small mb-2"><strong>Location:</strong> ${alert.location || 'Nearby Hospital'}</p>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-light" onclick="window.location.href='emergency-response.html'">Respond Now</button>
+                        <button type="button" class="btn btn-sm btn-outline-light" onclick="dismissEmergencyAlert('${alertId}')">Dismiss</button>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = alertHTML;
+        }
+
+        window.dismissEmergencyAlert = function(alertId) {
+            document.getElementById(alertId)?.remove();
+        };
+
+        // Set active menu item
+        function setActiveMenuItem() {
+            const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+            const menuLinks = document.querySelectorAll('.sidebar-menu a');
+            
+            menuLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('onclick')?.includes(currentPage)) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        setActiveMenuItem();
+    </script>
+</body>
+</html>

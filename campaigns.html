@@ -1,0 +1,499 @@
+   
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeFlow - Blood Bank & Donor Management System</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .campaign-img {
+            overflow: hidden;
+        }
+        .campaign-img img {
+            width: 100%;
+            height: 220px;
+            object-fit: contain;
+            display: block;
+            background-color: #f8f9fa;
+        }
+        .past-campaigns .card-img-top {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .campaign-img img,
+            .past-campaigns .card-img-top {
+                height: 180px;
+            }
+        }
+    </style>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+</head>
+ <!-- Top Bar -->
+    <div class="top-bar bg-dark text-white py-2">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center gap-3">
+                        <span><i class="fas fa-phone-alt me-2"></i>Emergency: 1990</span>
+                        <span><i class="fas fa-envelope me-2"></i>help@lifeflow.lk</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="d-inline-flex align-items-center gap-3">
+                        <div class="theme-switch">
+                            <button class="btn btn-sm btn-outline-light" id="themeToggle">
+                                <i class="fas fa-moon"></i>
+                            </button>
+                        </div>
+                        <a href="login.html" class="text-white text-decoration-none">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                        <a href="register.html" class="btn btn-danger btn-sm">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand" href="index.html">
+                <img src="https://img.freepik.com/premium-vector/blood-donation-logo-design-vector_369465-218.jpg" alt="LifeFlow Logo" height="40">
+                <span class="brand-name">Life<span class="text-danger">Flow</span></span>
+            </a>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="d-none d-lg-flex mx-auto" style="width: 400px;">
+                <div class="input-group search-box">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0" 
+                           id="globalSearch" 
+                           placeholder="Search for services, donors, hospitals..."
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                    <button class="btn btn-danger" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
+                    <!-- Search Results Dropdown -->
+                    <ul class="dropdown-menu w-100" id="searchResults">
+                        <li><h6 class="dropdown-header">Quick Actions</h6></li>
+                        <li><a class="dropdown-item" href="pages/donors.html"><i class="fas fa-users me-2"></i>Find Donors</a></li>
+                        <li><a class="dropdown-item" href="pages/emergency.html"><i class="fas fa-ambulance me-2"></i>Emergency Request</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><h6 class="dropdown-header">Services</h6></li>
+                        <li><a class="dropdown-item" href="pages/services.html#blood-test"><i class="fas fa-vial me-2"></i>Blood Testing</a></li>
+                        <li><a class="dropdown-item" href="pages/services.html#donation"><i class="fas fa-hand-holding-heart me-2"></i>Donation Camp</a></li>
+                        <li><a class="dropdown-item" href="pages/services.html#storage"><i class="fas fa-boxes me-2"></i>Blood Storage</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Nav Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nav Items -->
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="find-donor.html">Find Donors</a></li>
+                    <li class="nav-item"><a class="nav-link" href="campaigns.html">Campaigns</a></li>
+                    <li class="nav-item"><a class="nav-link" href="blog.html">Achievements</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    
+                    <!-- Mobile Search -->
+                    <li class="nav-item d-lg-none mt-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <button class="btn btn-danger" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Campaigns Hero -->
+    <section class="campaigns-hero py-5 bg-gradient-primary">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+                    <h1 class="display-3 fw-bold mb-4">Blood Donation Campaigns</h1>
+                    <p class="lead mb-4">Join our life-saving campaigns across Sri Lanka. Every donation matters!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Campaigns -->
+    <section class="py-5">
+        <div class="container">
+            <h3 class="fw-bold mb-4">Upcoming Campaigns</h3>
+            
+            <div class="row g-4">
+                <!-- Campaign 1 -->
+                <div class="col-md-6 col-lg-4" data-aos="fade-up">
+                    <div class="campaign-card card border-0 shadow-lg h-100">
+                        <div class="campaign-img position-relative">
+                            <img src="cam 01.png" alt="Blood Drive" class="w-100">
+                            <div class="campaign-date position-absolute top-0 end-0 m-3">
+                                <span class="badge bg-danger">June 14</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-2">Join the movement</h5>
+                            <p class="text-muted small mb-3">
+                                <i class="fas fa-map-marker-alt text-danger me-1"></i> 
+                                5/2, Symonds road,Maradana,Colombo 10
+                            </p>
+                            <p class="mb-3">Join our special blood donation campaign and give the precious gift of life to those in need.</p>
+                            <div class="campaign-info d-flex justify-content-between mb-3">
+                                <div>
+                                    <small class="text-muted">Target</small>
+                                    <h6 class="fw-bold mb-0">50 Donors</h6>
+                                </div>
+                                <div>
+                                    <small class="text-muted">Registered</small>
+                                    <h6 class="fw-bold mb-0">3 Donors</h6>
+                                </div>
+                            </div>
+                            <div class="progress mb-3" style="height: 8px;">
+                                <div class="progress-bar bg-danger" style="width: 68%"></div>
+                            </div>
+                            <a href="register.html" class="btn btn-danger w-100">
+                                <i class="fas fa-calendar-plus me-2"></i>Register as a Donor
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign 2 -->
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="campaign-card card border-0 shadow-lg h-100">
+                        <div class="campaign-img position-relative">
+                            <img src="cam 02.png" alt="University Campaign" class="w-100">
+                            <div class="campaign-date position-absolute top-0 end-0 m-3">
+                                <span class="badge bg-danger">December 12</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-2">Blood Donation Week</h5>
+                            <p class="text-muted small mb-3">
+                                <i class="fas fa-map-marker-alt text-danger me-1"></i> 
+                                57 ward Place,Colombo 7
+                            </p>
+                            <p class="mb-3">Participate in our week-long blood donation campaign designed for university students and staff to make a meaningful impact.</p>
+                            <div class="campaign-info d-flex justify-content-between mb-3">
+                                <div>
+                                    <small class="text-muted">Target</small>
+                                    <h6 class="fw-bold mb-0">100 Donors</h6>
+                                </div>
+                                <div>
+                                    <small class="text-muted">Registered</small>
+                                    <h6 class="fw-bold mb-0">5 Donors</h6>
+                                </div>
+                            </div>
+                            <div class="progress mb-3" style="height: 8px;">
+                                <div class="progress-bar bg-danger" style="width: 58%"></div>
+                            </div>
+                            <a href="register.html" class="btn btn-danger w-100">
+                                <i class="fas fa-calendar-plus me-2"></i>Register as a Donor
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign 3 -->
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="campaign-card card border-0 shadow-lg h-100">
+                        <div class="campaign-img position-relative">
+                            <img src="cam 03.png" alt="Corporate Campaign" class="w-100">
+                            <div class="campaign-date position-absolute top-0 end-0 m-3">
+                                <span class="badge bg-danger">August 08</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-2">Corporate Blood Donation Drive</h5>
+                            <p class="text-muted small mb-3">
+                                <i class="fas fa-map-marker-alt text-danger me-1"></i> 
+                                World Trade Center
+                            </p>
+                            <p class="mb-3">Take part in our corporate blood donation campaign, encouraging employees of leading companies to save lives together.</p>
+                            <div class="campaign-info d-flex justify-content-between mb-3">
+                                <div>
+                                    <small class="text-muted">Target</small>
+                                    <h6 class="fw-bold mb-0">50 Donors</h6>
+                                </div>
+                                <div>
+                                    <small class="text-muted">Registered</small>
+                                    <h6 class="fw-bold mb-0">4 Donors</h6>
+                                </div>
+                            </div>
+                            <div class="progress mb-3" style="height: 8px;">
+                                <div class="progress-bar bg-danger" style="width: 52%"></div>
+                            </div>
+                            <a href="register.html" class="btn btn-danger w-100">
+                                <i class="fas fa-calendar-plus me-2"></i>Register as a Donor
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Past Campaigns -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h3 class="fw-bold mb-4">Past Campaigns</h3>
+            
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Campaign Name</th>
+                            <th>Date</th>
+                            <th>Location</th>
+                            <th>Donors</th>
+                            <th>Units Collected</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>World Blood Donor Day 2025</td>
+                            <td>June 14, 2025</td>
+                            <td>Colombo</td>
+                            <td>1,245</td>
+                            <td>1,245</td>
+                            <td><span class="badge bg-success">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>National Blood Donation Month</td>
+                            <td>October 2025</td>
+                            <td>Gampaha</td>
+                            <td>5,678</td>
+                            <td>5,678</td>
+                            <td><span class="badge bg-success">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>New Year Blood Drive</td>
+                            <td>January 1, 2026</td>
+                            <td>Kandy</td>
+                            <td>856</td>
+                            <td>856</td>
+                            <td><span class="badge bg-success">Completed</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row g-4 mt-4 past-campaigns">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <img src="don1.jpg" class="card-img-top" alt="Past campaign 1">
+                        <div class="card-body p-3">
+                            <h6 class="card-title mb-1">World Blood Donor Day 2025</h6>
+                            <p class="card-text text-muted small mb-0">Colombo city center highlights and donation success.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <img src="don2.jpg" class="card-img-top" alt="Past campaign 2">
+                        <div class="card-body p-3">
+                            <h6 class="card-title mb-1">National Blood Donation Month</h6>
+                            <p class="card-text text-muted small mb-0">Community outreach and donor engagement across Gampaha.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <img src="don3.jpg" class="card-img-top" alt="Past campaign 3">
+                        <div class="card-body p-3">
+                            <h6 class="card-title mb-1">New Year Blood Drive</h6>
+                            <p class="card-text text-muted small mb-0">Kandy event recaps with donor stories and results.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Organize Campaign -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <h2 class="display-5 fw-bold mb-4">Want to Organize a Campaign?</h2>
+                    <p class="lead text-muted mb-4">We help organizations, companies, and communities organize successful blood donation campaigns.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Complete logistical support</li>
+                        <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Medical staff and equipment</li>
+                        <li class="mb-3"><i class="fas fa-check text-success me-2"></i>Promotional materials</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Post-campaign reporting</li>
+                    </ul>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="campaign-request-card card border-0 shadow-lg">
+                        <div class="card-body p-4">
+                            <h4 class="fw-bold mb-4">Request Campaign Support</h4>
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label">Organization Name</label>
+                                    <input type="text" class="form-control" placeholder="Your organization">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Contact Person</label>
+                                    <input type="text" class="form-control" placeholder="Full name">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" placeholder="email@organization.com">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Proposed Date</label>
+                                    <input type="date" class="form-control">
+                                </div>
+                                <button type="submit" class="btn btn-danger w-100">Submit Request</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="mb-4 d-flex align-items-center gap-3">
+                    <!-- Your Blood Logo from folder - Increased Size -->
+                    <img src="blood logo.png" alt="LifeFlow Blood Logo" height="120" width="120" style="object-fit: contain;" class="mb-3">
+                    <div>
+                        <h2 class="fw-bold mb-0" style="font-size: 2.5rem;">Life<span class="text-danger">Flow</span></h2>
+                        <p class="text-light mt-2 mb-0" style="font-size: 1rem;">Saving Lives Together</p>
+                    </div>
+                </div>
+                <p class="text-light mt-3">Sri Lanka's premier blood bank management system connecting donors with those in need.</p>
+                
+                <div class="social-links d-flex gap-3 mt-4">
+                    <a href="https://www.facebook.com/lifeflow.lk" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Facebook" title="Follow us on Facebook" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://twitter.com/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Twitter" title="Follow us on Twitter" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on Instagram" title="Follow us on Instagram" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on LinkedIn" title="Follow us on LinkedIn" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@lifeflow" class="btn btn-outline-light btn-md rounded-circle social-link" target="_blank" rel="noopener noreferrer" aria-label="LifeFlow on YouTube" title="Follow us on YouTube" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-4">
+                <h5 class="fw-bold mb-4">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="index.html" class="text-light text-decoration-none hover-effect">Home</a></li>
+                    <li class="mb-2"><a href="pages/about.html" class="text-light text-decoration-none hover-effect">About Us</a></li>
+                    <li class="mb-2"><a href="pages/services.html" class="text-light text-decoration-none hover-effect">Services</a></li>
+                    <li class="mb-2"><a href="pages/donors.html" class="text-light text-decoration-none hover-effect">Find Donors</a></li>
+                    <li class="mb-2"><a href="pages/campaigns.html" class="text-light text-decoration-none hover-effect">Campaigns</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <h5 class="fw-bold mb-4">Important Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="pages/emergency.html" class="text-light text-decoration-none hover-effect">Emergency Request</a></li>
+                    <li class="mb-2"><a href="blog.html" class="text-light text-decoration-none hover-effect">Health Achievements</a></li>
+                    <li class="mb-2"><a href="contact.html" class="text-light text-decoration-none hover-effect">Contact Us</a></li>
+                    <li class="mb-2"><a href="terms.html" class="text-light text-decoration-none hover-effect">Terms & Conditions</a></li>
+                    <li class="mb-2"><a href="privacy.html" class="text-light text-decoration-none hover-effect">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <h5 class="fw-bold mb-4">Contact Info</h5>
+                <ul class="list-unstyled text-light">
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-map-marker-alt text-danger me-3 mt-1"></i>
+                        <span>Faculty of Indigenous Health Sciences and Technology,<br>
+                        Gampaha Wickramarachchi University of Indigenous Medicine,<br>
+                        Sri Lanka</span>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-phone-alt text-danger me-3"></i>
+                        <span>Emergency: 1990<br>
+                        General: +94 11 234 5678</span>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-envelope text-danger me-3"></i>
+                        <span>help@lifeflow.lk</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="bg-light my-5" style="opacity: 0.2;">
+
+        <div class="row">
+            <div class="col-12 text-center">
+               <p class="mb-0">&copy; 2025 LifeFlow Blood Management System. All rights reserved. <span class="text-danger">🩸</span> Saving lives together.</p>
+        </div>
+        </div>
+    </div>
+</footer>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+</html>
